@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Clipboard, Text} from 'react-native';
 import {GoogleGenerativeAI} from '@google/generative-ai';
-import ChatHeader from '../components/ChatHeader';
 import ChatMessages from '../components/ChatMessages';
 import ChatInput from '../components/ChatInput';
 import Toast from 'react-native-toast-message';
 import apiKey from '../config/apiKey';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {getThemeColors, constants} from '../config/constants';
-import {useSelector} from 'react-redux';
+import {appTheme} from '../config/constants';
 
 // Initialize the API
 const genAI = new GoogleGenerativeAI(apiKey.API_KEY);
@@ -16,8 +14,8 @@ const genAI = new GoogleGenerativeAI(apiKey.API_KEY);
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const currentTheme = useSelector(state => state.theme.theme);
-  const colors = getThemeColors(currentTheme);
+
+  const colors = appTheme.colors;
 
   const handleSend = async text => {
     if (text.trim() === '') return;
@@ -68,7 +66,6 @@ const ChatScreen = () => {
   return (
     <View
       style={[styles.container, {backgroundColor: colors.primaryBackground}]}>
-      <ChatHeader />
       {messages.length === 0 && (
         <View
           style={[
@@ -80,7 +77,9 @@ const ChatScreen = () => {
             Welcome to Gemini Chat
           </Text>
           <Text style={[styles.welcomeText, {color: colors.secondaryText}]}>
-            How can I assist you today? Feel free to ask me anything!
+            Curious about plants? 🌿 Ask me anything about plant care, types of
+            plants, or gardening tips, and I'll provide you with helpful
+            insights!
           </Text>
         </View>
       )}
@@ -111,14 +110,14 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   welcomeTitle: {
-    fontSize: constants.fontSizes.xlarge,
-    fontFamily: constants.fontFamilies.bold,
+    fontSize: appTheme.fontSizes.xlarge,
+    fontFamily: appTheme.fontFamilies.bold,
     marginVertical: 10,
     textAlign: 'center',
   },
   welcomeText: {
-    fontSize: constants.fontSizes.medium,
-    fontFamily: constants.fontFamilies.regular,
+    fontSize: appTheme.fontSizes.medium,
+    fontFamily: appTheme.fontFamilies.regular,
     textAlign: 'center',
     marginBottom: 10,
   },

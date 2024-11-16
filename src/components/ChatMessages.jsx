@@ -9,14 +9,11 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-toast-message';
-import {constants, getThemeColors} from '../config/constants';
+import {appTheme} from '../config/constants';
 import LottieView from 'lottie-react-native';
-import {useSelector} from 'react-redux';
 
 const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
   const flatListRef = useRef(null);
-  const currentTheme = useSelector(state => state.theme.theme);
-  const colors = getThemeColors(currentTheme);
 
   useEffect(() => {
     if (flatListRef.current && messages.length > 0) {
@@ -24,7 +21,7 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
     }
   }, [messages, isLoading]);
 
-  const renderFormattedText = text => {
+  const renderFormattedText = (text, isUser) => {
     const lines = text.split('\n');
     let inCodeBlock = false;
     let codeContent = '';
@@ -41,7 +38,9 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
             style={[
               styles.subheading,
               styles.marginBottom,
-              {color: colors.primaryText},
+              isUser
+                ? {color: '#FFFFFF'}
+                : {color: appTheme.colors.primaryText},
             ]}>
             {number} {headingText}
           </Text>
@@ -59,12 +58,15 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
               style={[
                 styles.codeBlock,
                 styles.marginBottom,
-                {backgroundColor: colors.codeBlockBackground},
+                {backgroundColor: appTheme.colors.secondaryBackground},
               ]}>
               <View style={styles.codeContent}>
                 <Text
                   allowFontScaling={false}
-                  style={[styles.codeText, {color: colors.primaryText}]}>
+                  style={[
+                    styles.codeText,
+                    {color: appTheme.colors.primaryText},
+                  ]}>
                   {content}
                 </Text>
               </View>
@@ -83,7 +85,7 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
                 <Icon
                   name="content-copy"
                   size={20}
-                  color={colors.iconInactive}
+                  color={appTheme.colors.iconInactive}
                 />
               </TouchableOpacity>
             </View>
@@ -114,7 +116,9 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
                 style={[
                   styles.heading,
                   styles.marginBottom,
-                  {color: colors.primaryText},
+                  isUser
+                    ? {color: '#FFFFFF'}
+                    : {color: appTheme.colors.primaryText},
                 ]}>
                 {part.slice(3, -3).trim()}
               </Text>
@@ -127,7 +131,9 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
                 style={[
                   styles.subheading,
                   styles.marginBottom,
-                  {color: colors.primaryText},
+                  isUser
+                    ? {color: '#FFFFFF'}
+                    : {color: appTheme.colors.primaryText},
                 ]}>
                 {part.slice(2, -2).trim()}
               </Text>
@@ -137,7 +143,12 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
               <Text
                 allowFontScaling={false}
                 key={`${lineIndex}-${partIndex}`}
-                style={[styles.italic, {color: colors.primary}]}>
+                style={[
+                  styles.italic,
+                  isUser
+                    ? {color: '#FFFFFF'}
+                    : {color: appTheme.colors.primary},
+                ]}>
                 {part.slice(1, -1).trim()}
               </Text>
             );
@@ -146,7 +157,12 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
               <Text
                 allowFontScaling={false}
                 key={`${lineIndex}-${partIndex}`}
-                style={[styles.bodyText, {color: colors.secondaryText}]}>
+                style={[
+                  styles.bodyText,
+                  isUser
+                    ? {color: '#FFFFFF'}
+                    : {color: appTheme.colors.secondaryText},
+                ]}>
                 {part}
               </Text>
             );
@@ -162,7 +178,10 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
           style={[
             styles.messageBubble,
             styles.aiMessage,
-            {backgroundColor: colors.messageBubbleAI, paddingVertical: 0},
+            {
+              backgroundColor: appTheme.colors.secondaryBackground,
+              paddingVertical: 0,
+            },
           ]}>
           <LottieView
             source={require('../assets/animations/loading.json')}
@@ -183,13 +202,13 @@ const ChatMessages = ({messages, onMessageLongPress, isLoading}) => {
           style={[
             styles.messageBubble,
             message.user
-              ? [
-                  styles.userMessage,
-                  {backgroundColor: colors.messageBubbleUser},
-                ]
-              : [styles.aiMessage, {backgroundColor: colors.messageBubbleAI}],
+              ? [styles.userMessage, {backgroundColor: appTheme.colors.primary}]
+              : [
+                  styles.aiMessage,
+                  {backgroundColor: appTheme.colors.secondaryBackground},
+                ],
           ]}>
-          {renderFormattedText(message.text)}
+          {renderFormattedText(message.text, message.user)}
         </View>
       </TouchableOpacity>
     );
@@ -236,22 +255,22 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   heading: {
-    fontSize: constants.fontSizes.xlarge,
+    fontSize: appTheme.fontSizes.xlarge,
     fontWeight: 'bold',
   },
   subheading: {
-    fontSize: constants.fontSizes.medium,
+    fontSize: appTheme.fontSizes.medium,
     fontWeight: 'bold',
     fontStyle: 'italic',
     marginVertical: 10,
   },
   bodyText: {
-    fontSize: constants.fontSizes.small,
+    fontSize: appTheme.fontSizes.small,
     lineHeight: 24,
   },
   italic: {
     fontStyle: 'italic',
-    fontSize: constants.fontSizes.small,
+    fontSize: appTheme.fontSizes.small,
   },
   codeBlock: {
     borderRadius: 4,
@@ -263,8 +282,8 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   codeText: {
-    fontFamily: constants.fontFamilies.monospace,
-    fontSize: constants.fontSizes.small - 3,
+    fontFamily: appTheme.fontFamilies.monospace,
+    fontSize: appTheme.fontSizes.small - 3,
   },
   copyButton: {
     padding: 8,

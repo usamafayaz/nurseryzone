@@ -16,19 +16,19 @@ const DashboardScreen = ({navigation}) => {
     {
       title: 'Manage Plants',
       icon: 'local-florist',
-      screen: 'ManagePlants',
+      screen: 'Manage Plants',
       color: '#4CAF50',
     },
     {
       title: 'View Plants',
       icon: 'visibility',
-      screen: 'ViewPlants',
+      screen: 'View Plants',
       color: '#2196F3',
     },
     {
       title: 'Orders',
       icon: 'shopping-cart',
-      screen: 'OrderDetails',
+      screen: 'Order Details',
       color: '#FF9800',
     },
     {
@@ -42,6 +42,12 @@ const DashboardScreen = ({navigation}) => {
       icon: 'people',
       screen: 'Customers',
       color: '#9C27B0',
+    },
+    {
+      title: 'Chat with Gemini',
+      icon: 'chat',
+      screen: 'Chat Bot',
+      color: '#8BC34A',
     },
   ];
 

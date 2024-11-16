@@ -18,7 +18,33 @@ export const DUMMY_PLANTS = [
     image: 'https://via.placeholder.com/150',
     stock: 30,
   },
-  // Add more dummy plants...
+  {
+    id: '3',
+    name: 'Cactus',
+    season: 'Summer',
+    type: 'Succulent',
+    price: 15.99,
+    image: 'https://via.placeholder.com/150',
+    stock: 45,
+  },
+  {
+    id: '4',
+    name: 'Fern',
+    season: 'Spring/Fall',
+    type: 'Indoor',
+    price: 25.0,
+    image: 'https://via.placeholder.com/150',
+    stock: 20,
+  },
+  {
+    id: '5',
+    name: 'Tulip',
+    season: 'Spring',
+    type: 'Flower',
+    price: 12.99,
+    image: 'https://via.placeholder.com/150',
+    stock: 60,
+  },
 ];
 
 export const DUMMY_ORDERS = [
@@ -33,7 +59,41 @@ export const DUMMY_ORDERS = [
       {plantId: '2', quantity: 1, price: 19.99},
     ],
   },
-  // Add more dummy orders...
+  {
+    id: 'ORD002',
+    customerName: 'Alice Johnson',
+    date: '2024-03-16',
+    total: 49.97,
+    status: 'Shipped',
+    items: [{plantId: '3', quantity: 3, price: 15.99}],
+  },
+  {
+    id: 'ORD003',
+    customerName: 'Bob White',
+    date: '2024-03-17',
+    total: 79.95,
+    status: 'Delivered',
+    items: [{plantId: '4', quantity: 2, price: 25.0}],
+  },
+  {
+    id: 'ORD004',
+    customerName: 'Mary Green',
+    date: '2024-03-18',
+    total: 97.95,
+    status: 'Pending',
+    items: [{plantId: '5', quantity: 3, price: 12.99}],
+  },
+  {
+    id: 'ORD005',
+    customerName: 'James Brown',
+    date: '2024-03-19',
+    total: 59.98,
+    status: 'Shipped',
+    items: [
+      {plantId: '1', quantity: 1, price: 29.99},
+      {plantId: '3', quantity: 2, price: 15.99},
+    ],
+  },
 ];
 
 export const DUMMY_REVIEWS = [
@@ -46,7 +106,42 @@ export const DUMMY_REVIEWS = [
     comment: 'Beautiful and healthy plant!',
     date: '2024-03-10',
   },
-  // Add more dummy reviews...
+  {
+    id: 'REV002',
+    customerName: 'Tom Harris',
+    plantId: '2',
+    plantName: 'Snake Plant',
+    rating: 4,
+    comment: 'Great plant for indoor spaces, very easy to care for.',
+    date: '2024-03-12',
+  },
+  {
+    id: 'REV003',
+    customerName: 'Linda Taylor',
+    plantId: '3',
+    plantName: 'Cactus',
+    rating: 4,
+    comment: 'Perfect for dry conditions, but be careful with the thorns!',
+    date: '2024-03-14',
+  },
+  {
+    id: 'REV004',
+    customerName: 'Steve Miller',
+    plantId: '4',
+    plantName: 'Fern',
+    rating: 5,
+    comment: 'Lovely fern, adds a touch of greenery to my home.',
+    date: '2024-03-16',
+  },
+  {
+    id: 'REV005',
+    customerName: 'Rachel Adams',
+    plantId: '5',
+    plantName: 'Tulip',
+    rating: 5,
+    comment: 'Beautiful flowers, the colors are so vibrant!',
+    date: '2024-03-18',
+  },
 ];
 
 export const DUMMY_CUSTOMERS = [
@@ -58,5 +153,36 @@ export const DUMMY_CUSTOMERS = [
     joinDate: '2024-01-15',
     orderCount: 5,
   },
-  // Add more dummy customers...
+  {
+    id: 'CUS002',
+    name: 'Alice Johnson',
+    email: 'alice@example.com',
+    phone: '234-567-8901',
+    joinDate: '2024-02-10',
+    orderCount: 2,
+  },
+  {
+    id: 'CUS003',
+    name: 'Bob White',
+    email: 'bob@example.com',
+    phone: '345-678-9012',
+    joinDate: '2024-03-05',
+    orderCount: 3,
+  },
+  {
+    id: 'CUS004',
+    name: 'Mary Green',
+    email: 'mary@example.com',
+    phone: '456-789-0123',
+    joinDate: '2024-01-20',
+    orderCount: 4,
+  },
+  {
+    id: 'CUS005',
+    name: 'James Brown',
+    email: 'james@example.com',
+    phone: '567-890-1234',
+    joinDate: '2024-03-10',
+    orderCount: 1,
+  },
 ];
