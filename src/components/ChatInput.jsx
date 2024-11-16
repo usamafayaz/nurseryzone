@@ -1,14 +1,10 @@
-// components/ChatInput.js
 import React, {useState} from 'react';
 import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {constants, getThemeColors} from '../config/constants';
-import {useSelector} from 'react-redux';
+import {appTheme} from '../config/constants'; // Assuming constants contains the colors
 
 const ChatInput = ({onSend, disabled}) => {
   const [input, setInput] = useState('');
-  const currentTheme = useSelector(state => state.theme.theme);
-  const colors = getThemeColors(currentTheme);
 
   const handleSend = () => {
     if (input.trim() !== '') {
@@ -21,17 +17,20 @@ const ChatInput = ({onSend, disabled}) => {
     <View
       style={[
         styles.inputContainer,
-        {backgroundColor: colors.secondaryBackground},
+        {backgroundColor: appTheme.colors.secondaryBackground},
       ]}>
       <TextInput
         style={[
           styles.input,
-          {backgroundColor: colors.inputBackground, color: colors.primaryText},
+          {
+            backgroundColor: appTheme.colors.inputBackground,
+            color: appTheme.colors.primaryText,
+          },
         ]}
         value={input}
         onChangeText={setInput}
         placeholder="Type a message..."
-        placeholderTextColor={colors.placeholderText}
+        placeholderTextColor={appTheme.colors.placeholderText}
         editable={!disabled}
       />
       <TouchableOpacity
@@ -41,7 +40,9 @@ const ChatInput = ({onSend, disabled}) => {
         <Icon
           name="send"
           size={24}
-          color={disabled ? colors.iconInactive : colors.primary}
+          color={
+            disabled ? appTheme.colors.iconInactive : appTheme.colors.primary
+          }
         />
       </TouchableOpacity>
     </View>
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    fontSize: constants.fontSizes.small,
+    fontSize: appTheme.fontSizes.small,
   },
   sendButton: {
     marginLeft: 10,

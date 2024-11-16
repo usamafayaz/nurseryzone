@@ -9,6 +9,8 @@ import ViewPlantsScreen from '../screens/ViewPlantsScreen';
 import OrderDetailsScreen from '../screens/OrderDetailsScreen';
 import ReviewsScreen from '../screens/ReviewsScreen';
 import CustomersScreen from '../screens/CustomersScreen';
+import ChatScreen from '../screens/ChatScreen';
+
 import {StatusBar} from 'react-native';
 
 const Stack = createStackNavigator();
@@ -28,11 +30,12 @@ const AppNavigator = () => {
           component={DashboardScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="ManagePlants" component={ManagePlantsScreen} />
-        <Stack.Screen name="ViewPlants" component={ViewPlantsScreen} />
-        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} />
+        <Stack.Screen name="Manage Plants" component={ManagePlantsScreen} />
+        <Stack.Screen name="View Plants" component={ViewPlantsScreen} />
+        <Stack.Screen name="Order Details" component={OrderDetailsScreen} />
         <Stack.Screen name="Reviews" component={ReviewsScreen} />
         <Stack.Screen name="Customers" component={CustomersScreen} />
+        <Stack.Screen name="Chat Bot" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
