@@ -19,7 +19,12 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{
+          headerStyle: {backgroundColor: '#16a34a'},
+          headerTintColor: '#FFFFFF',
+        }}>
         <Stack.Screen
           name="Login"
           component={LoginScreen}
