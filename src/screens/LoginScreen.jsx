@@ -1,4 +1,4 @@
-// LoginScreen.js
+// LoginScreen.jsx
 import React, {useState} from 'react';
 import {
   View,
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {appTheme} from '../config/constants';
 import InputField from '../components/InputField';
+import {CommonActions} from '@react-navigation/native';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -17,7 +18,12 @@ const LoginScreen = ({navigation}) => {
 
   const handleLogin = () => {
     console.log('Login with:', {email, password});
-    navigation.navigate('Dashboard');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Dashboard'}],
+      }),
+    );
   };
 
   return (
@@ -76,6 +82,12 @@ const LoginScreen = ({navigation}) => {
               Log In
             </Text>
           </TouchableOpacity>
+
+          {/* <Button
+        title="Add Plant"
+        onPress={handleAddPlant}
+        style={styles.button}
+      /> */}
 
           <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
             <Text
@@ -167,3 +179,61 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+
+// const handleLoginPress = async () => {
+//   try {
+//     if (!usernameEmail.trim() || !password.trim()) {
+//       ToastAndroid.show(
+//         'Please provide necessary credentials.',
+//         ToastAndroid.SHORT,
+//       );
+//       return;
+//     }
+
+//     const response = await fetch(
+//       `${API_URL}/Employee/Login?username=${usernameEmail.trim()}&password=${password.trim()}`,
+//     );
+//     if (!response.ok) {
+//       ToastAndroid.show(
+//         'Incorrect credentials. Please try again.',
+//         ToastAndroid.SHORT,
+//       );
+//       return;
+//     }
+//     const data = await response.json();
+//     let role = data.user_role.toLowerCase();
+//     console.log(data);
+//     if (role === 'supervisor') {
+//       navigation.dispatch(
+//         CommonActions.reset({
+//           index: 0,
+//           routes: [{name: 'Supervisor Dashboard', params: {data: data}}],
+//         }),
+//       );
+//     } else if (role === 'employee') {
+//       navigation.dispatch(
+//         CommonActions.reset({
+//           index: 0,
+//           routes: [{name: 'Employee Login', params: {data: data}}],
+//         }),
+//       );
+//     } else if (role === 'admin') {
+//       navigation.dispatch(
+//         CommonActions.reset({
+//           index: 0,
+//           routes: [{name: 'Admin Dashboard', params: {name: data.name}}],
+//         }),
+//       );
+//     } else {
+//       ToastAndroid.show(
+//         'Incorrect credentials. Please try again.',
+//         ToastAndroid.SHORT,
+//       );
+//       return;
+//     }
+//     setUsernameEmail('');
+//     setPassword('');
+//   } catch (error) {
+//     console.error('Error occurred during login:', error);
+//   }
+// };
