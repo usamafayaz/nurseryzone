@@ -1,9 +1,9 @@
 // src/screens/OrderDetailsScreen.js
 import React from 'react';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
-import Card from '../components/Card';
-import {DUMMY_ORDERS} from '../utils/dummyData';
-import {appTheme} from '../config/constants';
+import Card from '../../../components/Card';
+import {appTheme} from '../../../config/constants';
+import {DUMMY_ORDERS} from '../../../utils/dummyData';
 
 const OrderDetailsScreen = () => {
   const renderOrder = ({item}) => (

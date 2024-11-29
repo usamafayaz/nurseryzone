@@ -1,9 +1,9 @@
 // src/screens/ManagePlantsScreen.js
 import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet, Alert, Text} from 'react-native';
-import InputField from '../components/InputField';
-import Button from '../components/Button'; // Assuming you have a Button component styled similarly.
-import {appTheme} from '../config/constants';
+import {appTheme} from '../../../config/constants';
+import Button from '../../../components/Button';
+import InputField from '../../../components/InputField';
 
 const ManagePlantsScreen = () => {
   const [plantData, setPlantData] = useState({

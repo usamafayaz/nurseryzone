@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const DashboardScreen = ({navigation}) => {
+const NurseryDashboard = ({navigation}) => {
   const {width} = useWindowDimensions();
   const numColumns = 2;
 
@@ -270,4 +270,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardScreen;
+export default NurseryDashboard;
