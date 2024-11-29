@@ -1,11 +1,11 @@
-// src/screens/ManagePlantsScreen.js
+// src/screens/ManagePlants.js
 import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet, Alert, Text} from 'react-native';
 import {appTheme} from '../../../config/constants';
 import Button from '../../../components/Button';
 import InputField from '../../../components/InputField';
 
-const ManagePlantsScreen = () => {
+const ManagePlants = () => {
   const [plantData, setPlantData] = useState({
     name: '',
     season: '',
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ManagePlantsScreen;
+export default ManagePlants;

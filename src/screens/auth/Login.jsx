@@ -14,7 +14,7 @@ import {CommonActions} from '@react-navigation/native';
 import InputField from '../../components/InputField';
 import {appTheme} from '../../config/constants';
 
-const LoginScreen = ({navigation}) => {
+const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default Login;
 
 // const handleLoginPress = async () => {
 //   try {
