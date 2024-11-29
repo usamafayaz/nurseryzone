@@ -1,9 +1,9 @@
 // src/screens/ReviewsScreen.js
 import React from 'react';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
-import Card from '../components/Card';
-import {DUMMY_REVIEWS} from '../utils/dummyData';
-import {appTheme} from '../config/constants';
+import Card from '../../../components/Card';
+import {DUMMY_REVIEWS} from '../../../utils/dummyData';
+import {appTheme} from '../../../config/constants';
 
 const ReviewsScreen = () => {
   const renderReview = ({item}) => (

@@ -2,16 +2,20 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import LoginScreen from '../screens/LoginScreen';
-import DashboardScreen from '../screens/DashboardScreen';
+
+import NurseryDashboard from '../screens/roles/nursery-admin/NurseryDashboard';
 import ManagePlantsScreen from '../screens/ManagePlantsScreen';
-import ViewPlantsScreen from '../screens/ViewPlantsScreen';
-import OrderDetailsScreen from '../screens/OrderDetailsScreen';
-import ReviewsScreen from '../screens/ReviewsScreen';
+import ViewPlantsScreen from '../screens/roles/nursery-admin/ViewPlants';
+import OrderDetailsScreen from '../screens/roles/nursery-admin/OrderDetails';
+import ReviewsScreen from '../screens/roles/nursery-admin/Reviews';
 import CustomersScreen from '../screens/CustomersScreen';
-import ChatScreen from '../screens/ChatScreen';
+import ChatBot from '../screens/roles/customer/ChatScreen';
 
 import {StatusBar} from 'react-native';
+import LoginScreen from '../screens/auth/Login';
+import SignupLanding from '../screens/auth/SignupLanding';
+import Signup from '../screens/auth/Signup';
+import AdminDashboard from '../screens/roles/super-admin/AdminDashboard';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +24,7 @@ const AppNavigator = () => {
     <NavigationContainer>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Signup"
         screenOptions={{
           headerStyle: {backgroundColor: '#16a34a'},
           headerTintColor: '#FFFFFF',
@@ -31,8 +35,23 @@ const AppNavigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Dashboard"
-          component={DashboardScreen}
+          name="SignupLanding"
+          component={SignupLanding}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AdminDashboard"
+          component={AdminDashboard}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="NurseryDashboard"
+          component={NurseryDashboard}
           options={{headerShown: false}}
         />
         <Stack.Screen name="Manage Plants" component={ManagePlantsScreen} />
@@ -40,7 +59,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Order Details" component={OrderDetailsScreen} />
         <Stack.Screen name="Reviews" component={ReviewsScreen} />
         <Stack.Screen name="Customers" component={CustomersScreen} />
-        <Stack.Screen name="Chat Bot" component={ChatScreen} />
+        <Stack.Screen name="Chat Bot" component={ChatBot} />
       </Stack.Navigator>
     </NavigationContainer>
   );

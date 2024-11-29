@@ -1,9 +1,9 @@
 // src/screens/CustomersScreen.js
 import React from 'react';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
-import Card from '../components/Card';
-import {DUMMY_CUSTOMERS} from '../utils/dummyData';
-import {appTheme} from '../config/constants';
+import {DUMMY_CUSTOMERS} from '../../../utils/dummyData';
+import {appTheme} from '../../../config/constants';
+import Card from '../../../components/Card';
 
 const CustomersScreen = () => {
   const renderCustomer = ({item}) => (

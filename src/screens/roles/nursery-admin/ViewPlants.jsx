@@ -1,9 +1,9 @@
 // src/screens/ViewPlantsScreen.js
 import React, {useState} from 'react';
 import {View, FlatList, StyleSheet, Text} from 'react-native';
-import PlantCard from '../components/PlantCard';
-import {DUMMY_PLANTS} from '../utils/dummyData';
-import {appTheme} from '../config/constants';
+import PlantCard from '../../../components/PlantCard';
+import {DUMMY_PLANTS} from '../../../utils/dummyData';
+import {appTheme} from '../../../config/constants';
 
 const ViewPlantsScreen = ({navigation}) => {
   const [plants, setPlants] = useState(DUMMY_PLANTS);

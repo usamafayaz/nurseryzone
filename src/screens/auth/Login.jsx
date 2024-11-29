@@ -7,10 +7,12 @@ import {
   SafeAreaView,
   StyleSheet,
   Image,
+  ScrollView,
 } from 'react-native';
-import {appTheme} from '../config/constants';
-import InputField from '../components/InputField';
+
 import {CommonActions} from '@react-navigation/native';
+import InputField from '../../components/InputField';
+import {appTheme} from '../../config/constants';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -21,13 +23,13 @@ const LoginScreen = ({navigation}) => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{name: 'Dashboard'}],
+        routes: [{name: 'AdminDashboard'}],
       }),
     );
   };
 
   return (
-    <SafeAreaView
+    <ScrollView
       style={[
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
@@ -35,7 +37,7 @@ const LoginScreen = ({navigation}) => {
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/logo/logo.png')}
+            source={require('../../assets/logo/logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -89,7 +91,8 @@ const LoginScreen = ({navigation}) => {
         style={styles.button}
       /> */}
 
-          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SignupLanding')}>
             <Text
               style={[
                 styles.footerText,
@@ -104,7 +107,7 @@ const LoginScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

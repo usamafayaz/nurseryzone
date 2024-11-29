@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Clipboard, Text} from 'react-native';
 import {GoogleGenerativeAI} from '@google/generative-ai';
-import ChatMessages from '../components/ChatMessages';
-import ChatInput from '../components/ChatInput';
+import ChatMessages from '../../../components/ChatMessages';
+import ChatInput from '../../../components/ChatInput';
 import Toast from 'react-native-toast-message';
-import apiKey from '../config/apiKey';
+import apiKey from '../../../config/apiKey';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {appTheme} from '../config/constants';
+import {appTheme} from '../../../config/constants';
 
 // Initialize the API
 const genAI = new GoogleGenerativeAI(apiKey.API_KEY);
 
-const ChatScreen = () => {
+const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatScreen;
+export default ChatBot;
