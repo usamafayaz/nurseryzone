@@ -1,11 +1,11 @@
-// src/screens/ReviewsScreen.js
+// src/screens/Reviews.js
 import React from 'react';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
 import Card from '../../../components/Card';
 import {DUMMY_REVIEWS} from '../../../utils/dummyData';
 import {appTheme} from '../../../config/constants';
 
-const ReviewsScreen = () => {
+const Reviews = () => {
   const renderReview = ({item}) => (
     <Card>
       <View style={styles.reviewHeader}>
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReviewsScreen;
+export default Reviews;

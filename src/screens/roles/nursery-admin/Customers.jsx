@@ -1,11 +1,11 @@
-// src/screens/CustomersScreen.js
+// src/screens/Customers.js
 import React from 'react';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
 import {DUMMY_CUSTOMERS} from '../../../utils/dummyData';
 import {appTheme} from '../../../config/constants';
 import Card from '../../../components/Card';
 
-const CustomersScreen = () => {
+const Customers = () => {
   const renderCustomer = ({item}) => (
     <Card style={styles.card}>
       <Text style={styles.name}>{item.name}</Text>
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomersScreen;
+export default Customers;

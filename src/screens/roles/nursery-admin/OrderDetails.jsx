@@ -1,11 +1,11 @@
-// src/screens/OrderDetailsScreen.js
+// src/screens/OrderDetails.js
 import React from 'react';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
 import Card from '../../../components/Card';
 import {appTheme} from '../../../config/constants';
 import {DUMMY_ORDERS} from '../../../utils/dummyData';
 
-const OrderDetailsScreen = () => {
+const OrderDetails = () => {
   const renderOrder = ({item}) => (
     <Card>
       <Text style={styles.orderId}>Order #{item.id}</Text>
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderDetailsScreen;
+export default OrderDetails;
