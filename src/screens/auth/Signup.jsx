@@ -11,6 +11,7 @@ import {
 import {CommonActions} from '@react-navigation/native';
 import InputField from '../../components/InputField';
 import {appTheme} from '../../config/constants';
+import API_BASE_URL from '../../utils/apiConfig';
 
 const Signup = ({navigation, route}) => {
   const [userInfo, setUserInfo] = useState({
@@ -20,36 +21,35 @@ const Signup = ({navigation, route}) => {
     address: '',
     contact_number: '',
   });
+
   const role = route.params.role;
   const handleSignup = async () => {
     const data = {
       ...userInfo,
       is_nursery: role === 'Customer' ? false : true,
     };
-    console.log('Data is ', data);
 
-    // const response = await fetch('http://localhost:8000/api/user', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(data),
-    // });
-    // const result = await response.json();
-    // console.log(result);
+    const response = await fetch(`${API_BASE_URL}/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
 
     if (role === 'Customer')
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{name: 'Dashboard'}],
+          routes: [{name: 'CustomerDashboard'}],
         }),
       );
     else
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{name: 'Dashboard'}],
+          routes: [{name: 'Login'}],
         }),
       );
   };
@@ -78,7 +78,7 @@ const Signup = ({navigation, route}) => {
           {backgroundColor: appTheme.colors.secondaryBackground},
         ]}>
         <InputField
-          label="Full Name"
+          label={role == 'Cusomter' ? 'Full Name' : 'Nursery Name'}
           iconName="person"
           value={userInfo.name}
           onChangeText={value => handleInputChange('name', value)}

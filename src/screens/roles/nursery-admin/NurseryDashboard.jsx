@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,36 +8,20 @@ import {
   SafeAreaView,
   useWindowDimensions,
   StatusBar,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import LogoutModal from '../../../components/LogoutModal';
 
 const NurseryDashboard = ({navigation}) => {
   const {width} = useWindowDimensions();
   const numColumns = 2;
 
-  const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Logout',
-          onPress: () => {
-            console.log('Confirming logout');
-            navigation.replace('Login');
-          },
-          style: 'destructive',
-        },
-      ],
-      {cancelable: true},
-    );
-  };
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
+  const handleLogout = () => {
+    navigation.navigate('Login');
+    setShowLogoutModal(false);
+  };
   const menuItems = [
     {
       title: 'Manage Plants',
@@ -84,7 +68,7 @@ const NurseryDashboard = ({navigation}) => {
             </View>
           </View>
           <TouchableOpacity
-            onPress={handleLogout}
+            onPress={() => setShowLogoutModal(true)}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
             style={styles.logoutButton}>
             <View style={styles.logoutButtonInner}>
@@ -132,7 +116,11 @@ const NurseryDashboard = ({navigation}) => {
             ))}
           </View>
         </View>
-
+        <LogoutModal
+          visible={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onLogout={handleLogout}
+        />
         <View style={[styles.decorativeCircle, styles.bottomLeftCircle]} />
         <View style={[styles.decorativeCircle, styles.bottomLeftCircleInner]} />
         <View style={[styles.decorativeCircle, styles.topRightCircle]} />

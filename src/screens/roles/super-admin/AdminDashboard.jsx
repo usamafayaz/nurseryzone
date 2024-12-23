@@ -1,18 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Dimensions,
+  StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
+import LogoutModal from '../../../components/LogoutModal';
 import {appTheme} from '../../../config/constants';
 
 const AdminDashboard = () => {
   const navigation = useNavigation();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogout = () => {
+    navigation.navigate('Login');
+    setShowLogoutModal(false);
+  };
 
   const menuItems = [
     {
@@ -35,7 +42,11 @@ const AdminDashboard = () => {
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
       ]}>
-      {/* Header */}
+      <StatusBar
+        backgroundColor={appTheme.colors.primary}
+        barStyle="light-content"
+      />
+
       <View style={[styles.header, {backgroundColor: appTheme.colors.primary}]}>
         <View style={styles.headerContent}>
           <View style={styles.headerText}>
@@ -44,10 +55,14 @@ const AdminDashboard = () => {
               Manage and oversee nursery network
             </Text>
           </View>
+          <TouchableOpacity
+            style={styles.logoutButton}
+            onPress={() => setShowLogoutModal(true)}>
+            <Icon name="logout" size={24} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Menu Items */}
       <View style={styles.menuContainer}>
         {menuItems.map((item, index) => (
           <TouchableOpacity
@@ -73,6 +88,12 @@ const AdminDashboard = () => {
           </TouchableOpacity>
         ))}
       </View>
+
+      <LogoutModal
+        visible={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onLogout={handleLogout}
+      />
     </ScrollView>
   );
 };
@@ -87,9 +108,13 @@ const styles = StyleSheet.create({
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   headerText: {
-    marginLeft: 16,
+    flex: 1,
+  },
+  logoutButton: {
+    padding: 8,
   },
   title: {
     fontSize: appTheme.fontSizes.xlarge,
@@ -99,7 +124,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: appTheme.fontSizes.medium,
     fontFamily: appTheme.fontFamilies.regular,
-    color: appTheme.colors.secondaryText,
+    color: appTheme.colors.primaryBackground,
   },
   menuContainer: {
     paddingHorizontal: 16,

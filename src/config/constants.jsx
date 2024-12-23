@@ -10,7 +10,7 @@ export const appTheme = {
     primaryText: '#2D3A2D', // Dark green
     secondaryText: '#5C745C', // Muted green
     placeholderText: '#96A896', // Light muted green
-    primary: '#4A8B3D', // Forest green
+    primary: '#16a34a', // Forest green
     secondary: '#7AB770', // Light green
     accent: '#E6B34E', // Golden yellow for accents
     success: '#43A047', // Success green
@@ -18,6 +18,7 @@ export const appTheme = {
     border: '#CCDACC', // Light border
     iconActive: '#4A8B3D', // Forest green
     iconInactive: '#96A896', // Muted green
+    warning: '#eab308',
   },
   fontSizes: {
     small: width * 0.035,

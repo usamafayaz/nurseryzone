@@ -15,14 +15,15 @@ import ViewPlants from '../screens/roles/nursery-admin/ViewPlants';
 import OrderDetails from '../screens/roles/nursery-admin/OrderDetails';
 import Reviews from '../screens/roles/nursery-admin/Reviews';
 import Customers from '../screens/roles/nursery-admin/Customers';
-
 import ChatBot from '../screens/roles/customer/ChatScreen';
+import NurseryPendingApproval from '../screens/roles/nursery-admin/PendingApproval';
 
 import AdminDashboard from '../screens/roles/super-admin/AdminDashboard';
 import NurseryRequests from '../screens/roles/super-admin/NurseryRequests';
 import RegisteredNurseries from '../screens/roles/super-admin/RegisteredNurseries';
 
 import CustomerDashboard from '../screens/roles/customer/CustomerDashboard';
+import DeliveryManDashboard from '../screens/roles/delivery-man/DeliveryManDashboard';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,6 @@ const AppNavigator = () => {
     <NavigationContainer>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
       <Stack.Navigator
-        initialRouteName="Signup"
         screenOptions={{
           headerStyle: {backgroundColor: '#16a34a'},
           headerTintColor: '#FFFFFF',
@@ -67,6 +67,11 @@ const AppNavigator = () => {
         <Stack.Screen name="Reviews" component={Reviews} />
         <Stack.Screen name="Customers" component={Customers} />
         <Stack.Screen name="Chat Bot" component={ChatBot} />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Pending Approval"
+          component={NurseryPendingApproval}
+        />
 
         {/* Super Admin */}
 
@@ -90,6 +95,13 @@ const AppNavigator = () => {
         <Stack.Screen
           name="CustomerDashboard"
           component={CustomerDashboard}
+          options={{headerShown: false}}
+        />
+
+        {/* Delivery Man */}
+        <Stack.Screen
+          name="DeliveryManDashboard"
+          component={DeliveryManDashboard}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
