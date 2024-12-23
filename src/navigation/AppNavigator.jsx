@@ -4,19 +4,20 @@ import {StatusBar} from 'react-native';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+import {appTheme} from '../config/constants';
 
 import Login from '../screens/auth/Login';
 import SignupLanding from '../screens/auth/SignupLanding';
 import Signup from '../screens/auth/Signup';
 
 import NurseryDashboard from '../screens/roles/nursery-admin/NurseryDashboard';
+import AddPlant from '../screens/roles/nursery-admin/AddPlant';
 import ManagePlants from '../screens/roles/nursery-admin/ManagePlants';
-import ViewPlants from '../screens/roles/nursery-admin/ViewPlants';
 import OrderDetails from '../screens/roles/nursery-admin/OrderDetails';
 import Reviews from '../screens/roles/nursery-admin/Reviews';
-import Customers from '../screens/roles/nursery-admin/Customers';
 import ChatBot from '../screens/roles/customer/ChatScreen';
 import NurseryPendingApproval from '../screens/roles/nursery-admin/PendingApproval';
+import AddDeliveryBoy from '../screens/roles/nursery-admin/AddDeliveryBoy';
 
 import AdminDashboard from '../screens/roles/super-admin/AdminDashboard';
 import NurseryRequests from '../screens/roles/super-admin/NurseryRequests';
@@ -24,85 +25,62 @@ import RegisteredNurseries from '../screens/roles/super-admin/RegisteredNurserie
 
 import CustomerDashboard from '../screens/roles/customer/CustomerDashboard';
 import DeliveryManDashboard from '../screens/roles/delivery-man/DeliveryManDashboard';
+import ProductDetail from '../screens/roles/customer/ProductDetail';
+import CartScreen from '../screens/roles/customer/CartScreen';
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
+      <StatusBar
+        backgroundColor={appTheme.colors.primary}
+        barStyle="dark-content"
+      />
       <Stack.Navigator
         screenOptions={{
           headerStyle: {backgroundColor: '#16a34a'},
           headerTintColor: '#FFFFFF',
+          headerShown: false,
         }}>
         {/* Auth Screens*/}
 
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SignupLanding"
-          component={SignupLanding}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={Signup}
-          options={{headerShown: false}}
-        />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignupLanding" component={SignupLanding} />
+        <Stack.Screen name="Signup" component={Signup} />
 
         {/* Nursery Admin */}
 
-        <Stack.Screen
-          name="NurseryDashboard"
-          component={NurseryDashboard}
-          options={{headerShown: false}}
-        />
+        <Stack.Screen name="NurseryDashboard" component={NurseryDashboard} />
+        <Stack.Screen name="Add Plant" component={AddPlant} />
         <Stack.Screen name="Manage Plants" component={ManagePlants} />
-        <Stack.Screen name="View Plants" component={ViewPlants} />
         <Stack.Screen name="Order Details" component={OrderDetails} />
         <Stack.Screen name="Reviews" component={Reviews} />
-        <Stack.Screen name="Customers" component={Customers} />
         <Stack.Screen name="Chat Bot" component={ChatBot} />
         <Stack.Screen
-          options={{headerShown: false}}
           name="Pending Approval"
           component={NurseryPendingApproval}
         />
+        <Stack.Screen name="AddDeliveryBoy" component={AddDeliveryBoy} />
 
         {/* Super Admin */}
 
-        <Stack.Screen
-          name="AdminDashboard"
-          component={AdminDashboard}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="NurseryRequests"
-          component={NurseryRequests}
-          options={{headerShown: false}}
-        />
+        <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+        <Stack.Screen name="NurseryRequests" component={NurseryRequests} />
         <Stack.Screen
           name="RegisteredNurseries"
           component={RegisteredNurseries}
-          options={{headerShown: false}}
         />
 
         {/* Customer */}
-        <Stack.Screen
-          name="CustomerDashboard"
-          component={CustomerDashboard}
-          options={{headerShown: false}}
-        />
+        <Stack.Screen name="CustomerDashboard" component={CustomerDashboard} />
+        <Stack.Screen name="Product Detail" component={ProductDetail} />
+        <Stack.Screen name="CartScreen" component={CartScreen} />
 
         {/* Delivery Man */}
         <Stack.Screen
           name="DeliveryManDashboard"
           component={DeliveryManDashboard}
-          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

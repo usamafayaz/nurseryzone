@@ -13,12 +13,15 @@ import InputField from '../../components/InputField';
 import {appTheme} from '../../config/constants';
 import API_BASE_URL from '../../utils/apiConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('ever@gmail.com');
+  const [email, setEmail] = useState('sarmad@gmail.com');
   const [password, setPassword] = useState('userpassword');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       if (!email.trim() || !password.trim()) {
         ToastAndroid.show(
@@ -94,6 +97,8 @@ const Login = ({navigation}) => {
         'Something went wrong. Please try again later.',
         ToastAndroid.SHORT,
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -170,6 +175,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
+      <LoadingOverlay visible={loading} />
     </ScrollView>
   );
 };

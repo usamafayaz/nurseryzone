@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
@@ -42,11 +41,6 @@ const AdminDashboard = () => {
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
       ]}>
-      <StatusBar
-        backgroundColor={appTheme.colors.primary}
-        barStyle="light-content"
-      />
-
       <View style={[styles.header, {backgroundColor: appTheme.colors.primary}]}>
         <View style={styles.headerContent}>
           <View style={styles.headerText}>

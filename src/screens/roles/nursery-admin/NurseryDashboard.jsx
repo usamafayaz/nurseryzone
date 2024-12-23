@@ -7,10 +7,10 @@ import {
   ScrollView,
   SafeAreaView,
   useWindowDimensions,
-  StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LogoutModal from '../../../components/LogoutModal';
+import {appTheme} from '../../../config/constants';
 
 const NurseryDashboard = ({navigation}) => {
   const {width} = useWindowDimensions();
@@ -24,14 +24,14 @@ const NurseryDashboard = ({navigation}) => {
   };
   const menuItems = [
     {
-      title: 'Manage Plants',
-      description: 'Add, edit, and maintain your plant inventory',
-      screen: 'Manage Plants',
+      title: 'Add Plant',
+      description: 'Add new plants to your inventory',
+      screen: 'Add Plant',
     },
     {
-      title: 'View Plants',
-      description: 'Browse and search your plant collection',
-      screen: 'View Plants',
+      title: 'Manage Plants',
+      description: 'Edit, delete and manage your plants inventory',
+      screen: 'Manage Plants',
     },
     {
       title: 'Orders',
@@ -44,9 +44,9 @@ const NurseryDashboard = ({navigation}) => {
       screen: 'Reviews',
     },
     {
-      title: 'Customers',
-      description: 'View and manage customer information',
-      screen: 'Customers',
+      title: 'Add Delivery Boy',
+      description: 'Add and manage delivery boy',
+      screen: 'AddDeliveryBoy',
     },
     {
       title: 'Chat with Gemini',
@@ -57,8 +57,6 @@ const NurseryDashboard = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#16a34a" barStyle="light-content" />
-
       <View style={styles.headerContainer}>
         <View style={styles.headerContent}>
           <View style={styles.headerLeft}>
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0fdf4',
   },
   headerContainer: {
-    backgroundColor: '#16a34a',
+    backgroundColor: appTheme.colors.primary,
     padding: 24,
     zIndex: 1,
   },
