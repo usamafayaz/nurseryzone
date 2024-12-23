@@ -9,6 +9,7 @@ import {
   Modal,
   ScrollView,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -76,52 +77,70 @@ const ManagePlants = ({navigation}) => {
   };
 
   const handleModalSave = async () => {
-    const requiredFields = ['name', 'description', 'price', 'stock'];
-    const missingFields = requiredFields.filter(field => !modalPlant[field]);
+    try {
+      // Validate required fields
+      const requiredFields = ['name', 'description', 'price', 'stock'];
+      const missingFields = requiredFields.filter(field => !modalPlant[field]);
 
-    if (missingFields.length > 0) {
-      Alert.alert('Error', `Please fill in: ${missingFields.join(', ')}`);
-      return;
-    }
+      if (missingFields.length > 0) {
+        Alert.alert('Error', `Please fill in: ${missingFields.join(', ')}`);
+        return;
+      }
 
-    const formData = new FormData();
-    Object.keys(modalPlant).forEach(key => {
-      if (key === 'image' && modalPlant[key]) {
+      // Create FormData object
+      const formData = new FormData();
+
+      // Append all required fields
+      formData.append('plant_id', modalPlant.plant_id.toString());
+      formData.append('name', modalPlant.name);
+      formData.append('description', modalPlant.description);
+      formData.append('price', modalPlant.price.toString());
+      formData.append('stock', parseInt(modalPlant.stock).toString());
+
+      // Handle image
+      if (modalPlant.image) {
         formData.append('image', {
-          uri: modalPlant[key].uri,
+          uri: modalPlant.image.uri,
           type: 'image/jpeg',
           name: 'plant_image.jpg',
         });
-      } else if (key !== 'currentImage') {
-        formData.append(key, modalPlant[key]);
       }
-    });
 
-    try {
-      console.log(formData);
+      // Get nursery data for authorization if needed
+      const nurseryData = await AsyncStorage.getItem('userData');
+      const nursery = JSON.parse(nurseryData);
+
       const response = await fetch(`${API_BASE_URL}/nursery/plant`, {
         method: 'PUT',
         headers: {
+          Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
+          // Add any authorization headers if required
+          // 'Authorization': `Bearer ${nursery.token}`,
         },
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Failed to update plant');
+      const responseData = await response.json();
 
-      const updatedPlant = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to update plant');
+      }
+
       Alert.alert('Success', 'Plant updated successfully');
 
+      // Update local state
       setPlants(prevPlants =>
         prevPlants.map(plant =>
-          plant.plant_id === updatedPlant.plant_id ? updatedPlant : plant,
+          plant.plant_id === modalPlant.plant_id ? responseData : plant,
         ),
       );
+
       handleModalClose();
-      fetchPlants();
+      await fetchPlants(); // Refresh the list
     } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', 'Failed to update plant');
+      console.error('Error updating plant:', error);
+      Alert.alert('Error', error.message || 'Failed to update plant');
     }
   };
 
@@ -192,7 +211,7 @@ const ManagePlants = ({navigation}) => {
         <FlatList
           data={plants}
           renderItem={renderPlantCard}
-          keyExtractor={item => item.plant_id.toString()}
+          // keyExtractor={item => item.plant_id.toString()}
           contentContainerStyle={styles.listContainer}
         />
       )}

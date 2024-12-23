@@ -36,22 +36,12 @@ const Signup = ({navigation, route}) => {
       },
       body: JSON.stringify(data),
     });
-    const result = await response.json();
-
-    if (role === 'Customer')
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'CustomerDashboard'}],
-        }),
-      );
-    else
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Login'}],
-        }),
-      );
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Login'}],
+      }),
+    );
   };
   const handleInputChange = (field, value) => {
     setUserInfo(prev => ({...prev, [field]: value}));
