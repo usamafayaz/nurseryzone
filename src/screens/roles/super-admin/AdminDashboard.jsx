@@ -40,7 +40,8 @@ const AdminDashboard = () => {
       style={[
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
-      ]}>
+      ]}
+      bounces={false}>
       <View style={[styles.header, {backgroundColor: appTheme.colors.primary}]}>
         <View style={styles.headerContent}>
           <View style={styles.headerText}>

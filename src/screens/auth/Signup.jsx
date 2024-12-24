@@ -1,4 +1,3 @@
-// Signup.jsx
 import React, {useState} from 'react';
 import {
   View,
@@ -52,7 +51,8 @@ const Signup = ({navigation, route}) => {
       style={[
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
-      ]}>
+      ]}
+      bounces={false}>
       <View style={styles.logoContainer}>
         <Text style={[styles.title, {color: appTheme.colors.primary}]}>
           Nursery Zone

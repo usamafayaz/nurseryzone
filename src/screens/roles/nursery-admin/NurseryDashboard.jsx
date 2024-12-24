@@ -76,7 +76,7 @@ const NurseryDashboard = ({navigation}) => {
         </View>
       </View>
 
-      <ScrollView>
+      <ScrollView bounces={false}>
         <View style={styles.mainContent}>
           <View
             style={[

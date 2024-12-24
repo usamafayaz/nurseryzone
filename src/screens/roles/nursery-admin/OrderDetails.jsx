@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
-  TouchableOpacity,
   StyleSheet,
   SafeAreaView,
   ToastAndroid,

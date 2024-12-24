@@ -1,17 +1,15 @@
-// components/CustomHeader.js
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {appTheme} from '../../../config/constants';
+import {useSelector} from 'react-redux';
 
-const CustomerHeader = ({
-  title = 'Plant Store',
-  cartItemCount = 0,
-  onLogout,
-}) => {
+const CustomerHeader = ({title = 'Plant Store', onLogout}) => {
   const navigation = useNavigation();
 
+  const cart = useSelector(state => state.cart.items);
+  cartItemCount = cart.length;
   const handleCartPress = () => {
     navigation.navigate('CartScreen');
   };
@@ -83,15 +81,14 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    top: 0,
+    top: 2,
     right: 0,
-    backgroundColor: appTheme.colors.primary,
+    backgroundColor: appTheme.colors.error,
     borderRadius: 12,
     minWidth: 18,
     height: 18,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 4,
   },
   badgeText: {
     color: 'white',

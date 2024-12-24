@@ -44,7 +44,7 @@ const DeliveryManDashboard = ({navigation}) => {
         `${API_BASE_URL}/delivery/schedule?user_id=${userId}`,
       );
       const result = await response.json();
-      setDeliveries(result);
+      setDeliveries(result.reverse());
     } catch (error) {
       console.error(error);
     } finally {

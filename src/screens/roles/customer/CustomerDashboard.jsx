@@ -7,8 +7,6 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
-  Image,
-  Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
@@ -39,9 +37,6 @@ const CustomerDashboard = () => {
   const fetchPlants = async () => {
     data = await AsyncStorage.getItem('userData');
     data = JSON.parse(data);
-
-    // data = data.json();
-    console.log(data);
     try {
       const response = await fetch(
         `${API_BASE_URL}/nursery/plants?skip=0&limit=20`,
@@ -72,7 +67,6 @@ const CustomerDashboard = () => {
   return (
     <View style={styles.container}>
       <CustomerHeader
-        cartItemCount={0}
         onLogout={handleShowLogoutModal}
         title={`Welcome, ${userData.name}`}
       />
@@ -92,8 +86,12 @@ const CustomerDashboard = () => {
             onChangeText={setSearchTerm}
           />
         </View>
-        <TouchableOpacity style={styles.filterButton}>
-          <Icon name="filter-list" size={20} color="white" />
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={() => {
+            navigation.navigate('TrackOrder');
+          }}>
+          <Icon name="local-shipping" size={20} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -152,7 +150,7 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     backgroundColor: appTheme.colors.primary,
-    padding: 12,
+    paddingHorizontal: 18,
     borderRadius: 12,
     justifyContent: 'center',
   },

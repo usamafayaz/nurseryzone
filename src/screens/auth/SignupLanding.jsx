@@ -23,7 +23,8 @@ const SignupLanding = () => {
       style={[
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
-      ]}>
+      ]}
+      bounces={false}>
       <View style={styles.content}>
         {/* Header Section with Logo */}
         <View style={styles.logoContainer}>

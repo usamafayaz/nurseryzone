@@ -27,6 +27,9 @@ import CustomerDashboard from '../screens/roles/customer/CustomerDashboard';
 import DeliveryManDashboard from '../screens/roles/delivery-man/DeliveryManDashboard';
 import ProductDetail from '../screens/roles/customer/ProductDetail';
 import CartScreen from '../screens/roles/customer/CartScreen';
+import CheckoutScreen from '../screens/roles/customer/Checkout';
+import OrderSuccess from '../screens/roles/customer/OrderSuccess';
+import TrackOrder from '../screens/roles/customer/TrackOrder';
 
 const Stack = createStackNavigator();
 
@@ -76,6 +79,9 @@ const AppNavigator = () => {
         <Stack.Screen name="CustomerDashboard" component={CustomerDashboard} />
         <Stack.Screen name="Product Detail" component={ProductDetail} />
         <Stack.Screen name="CartScreen" component={CartScreen} />
+        <Stack.Screen name="Checkout" component={CheckoutScreen} />
+        <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
+        <Stack.Screen name="TrackOrder" component={TrackOrder} />
 
         {/* Delivery Man */}
         <Stack.Screen

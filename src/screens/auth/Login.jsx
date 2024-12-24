@@ -15,6 +15,7 @@ import {appTheme} from '../../config/constants';
 import {API_BASE_URL, updateAPIUrl} from '../../utils/apiConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingOverlay from '../../components/LoadingOverlay';
+import IPAddressModal from '../../components/IpAddressModal';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('sarmad@gmail.com');
@@ -145,7 +146,8 @@ const Login = ({navigation}) => {
       style={[
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
-      ]}>
+      ]}
+      bounces={false}>
       <TouchableOpacity
         style={styles.ipButton}
         onPress={() => setApiModalVisible(true)}>
@@ -219,34 +221,14 @@ const Login = ({navigation}) => {
         </View>
       </View>
       <LoadingOverlay visible={loading} />
-      <Modal
+      <IPAddressModal
         visible={apiModalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setApiModalVisible(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalWrapper}>
-            <Text style={styles.modalHeaderStyle}>Change IP Address</Text>
-            <Text style={styles.hintText}>Current IP: {currentIP}</Text>
-            <Text style={styles.hintText}>IP Address:</Text>
-
-            <InputField
-              placeholder="Enter IP Address"
-              value={apiAddress}
-              onChangeText={setApiAddress}
-              iconName="lock"
-            />
-            <View style={styles.modalButtonWrapper}>
-              <TouchableOpacity onPress={() => setApiModalVisible(false)}>
-                <Text style={styles.cancelStyle}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={saveApiAddress}>
-                <Text style={styles.OKStyle}>Done</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setApiModalVisible(false)}
+        onSave={saveApiAddress}
+        currentIP={currentIP}
+        apiAddress={apiAddress}
+        onChangeApiAddress={setApiAddress}
+      />
     </ScrollView>
   );
 };
@@ -334,58 +316,6 @@ const styles = StyleSheet.create({
     color: appTheme.colors.primaryBackground,
     fontSize: appTheme.fontSizes.small,
     fontFamily: appTheme.fontFamilies.bold,
-  },
-  modalWrapper: {
-    backgroundColor: appTheme.colors.primaryBackground,
-    borderRadius: 16,
-    padding: 20,
-    width: '90%',
-    alignSelf: 'center',
-  },
-  modalHeaderStyle: {
-    fontSize: appTheme.fontSizes.large,
-    fontFamily: appTheme.fontFamilies.bold,
-    color: appTheme.colors.primary,
-    marginBottom: 20,
-  },
-  modalButtonWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 20,
-  },
-  cancelStyle: {
-    color: appTheme.colors.secondaryText,
-    marginRight: 20,
-    fontSize: appTheme.fontSizes.medium,
-    fontFamily: appTheme.fontFamilies.bold,
-  },
-  OKStyle: {
-    color: appTheme.colors.primaryBackground,
-    backgroundColor: appTheme.colors.primary,
-    borderRadius: 8,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    fontSize: appTheme.fontSizes.medium,
-    fontFamily: appTheme.fontFamilies.bold,
-  },
-  hintText: {
-    color: appTheme.colors.secondaryText,
-    fontSize: appTheme.fontSizes.medium,
-    fontFamily: appTheme.fontFamilies.regular,
-    marginBottom: 10,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalWrapper: {
-    backgroundColor: appTheme.colors.primaryBackground,
-    borderRadius: 16,
-    padding: 20,
-    width: '90%',
-    elevation: 5,
   },
 });
 

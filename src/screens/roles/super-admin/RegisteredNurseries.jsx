@@ -82,7 +82,7 @@ const RegisteredNurseries = () => {
           </View>
 
           {selectedNursery && (
-            <ScrollView style={styles.modalBody}>
+            <ScrollView style={styles.modalBody} bounces={false}>
               <View style={styles.detailRow}>
                 <Text style={styles.detailLabel}>Nursery Name</Text>
                 <Text style={styles.detailValue}>{selectedNursery.name}</Text>

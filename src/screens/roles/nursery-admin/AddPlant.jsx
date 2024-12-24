@@ -94,7 +94,7 @@ const AddPlant = () => {
         <Text style={styles.headerTitle}>Add Plants</Text>
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} bounces={false}>
         <View style={styles.form}>
           <InputField
             label="Name *"

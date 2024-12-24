@@ -3,31 +3,28 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {API_BASE_URL} from '../../../utils/apiConfig';
 import {appTheme} from '../../../config/constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeItem, updateItemQuantity} from '../../../redux/cartSlice';
 
 const CartScreen = ({navigation}) => {
-  const [cart, setCart] = React.useState([]);
+  const cart = useSelector(state => state.cart.items);
+  const dispatch = useDispatch();
 
   const updateQuantity = (plantId, newQuantity) => {
     if (newQuantity < 1) return;
-
-    setCart(prevCart =>
-      prevCart.map(item =>
-        item.plant_id === plantId ? {...item, quantity: newQuantity} : item,
-      ),
-    );
+    dispatch(updateItemQuantity({plantId, quantity: newQuantity}));
   };
 
   const removeFromCart = plantId => {
-    setCart(prevCart => prevCart.filter(item => item.plant_id !== plantId));
+    dispatch(removeItem(plantId));
   };
-
   const getTotalPrice = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
@@ -108,11 +105,10 @@ const CartScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
         ) : (
-          <ScrollView>
-            {cart.map(item => (
-              <CartItem key={item.plant_id} item={item} />
-            ))}
-          </ScrollView>
+          <FlatList
+            data={cart}
+            renderItem={({item}) => <CartItem item={item} />}
+          />
         )}
       </View>
 
@@ -143,12 +139,7 @@ const CartScreen = ({navigation}) => {
             styles.checkoutButton,
             cart.length === 0 && styles.disabledButton,
           ]}
-          onPress={() =>
-            navigation.navigate('Checkout', {
-              cart,
-              totalPrice: getTotalPrice(),
-            })
-          }
+          onPress={() => navigation.navigate('Checkout')}
           disabled={cart.length === 0}>
           <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
         </TouchableOpacity>
@@ -265,6 +256,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: appTheme.fontSizes.medium,
     fontFamily: appTheme.fontFamilies.medium,
+    color: appTheme.colors.primaryText,
   },
   removeButton: {
     padding: 8,
@@ -293,6 +285,7 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontFamily: appTheme.fontFamilies.medium,
     fontSize: appTheme.fontSizes.medium,
+    color: appTheme.colors.secondaryText,
   },
   shippingText: {
     color: appTheme.colors.primary,
@@ -307,6 +300,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   totalLabel: {
+    color: appTheme.colors.primaryText,
     fontSize: appTheme.fontSizes.large,
     fontFamily: appTheme.fontFamilies.bold,
   },

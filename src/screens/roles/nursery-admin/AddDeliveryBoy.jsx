@@ -70,7 +70,8 @@ const AddDeliveryBoy = ({navigation}) => {
       style={[
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
-      ]}>
+      ]}
+      bounces={false}>
       <View style={styles.logoContainer}>
         <Text style={[styles.title, {color: appTheme.colors.primary}]}>
           Register Delivery Associate

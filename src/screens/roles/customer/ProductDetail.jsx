@@ -11,12 +11,15 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
 import {API_BASE_URL} from '../../../utils/apiConfig';
+import {useDispatch} from 'react-redux';
+import {addItem} from '../../../redux/cartSlice';
 
 const ProductDetail = ({route, navigation}) => {
   const {plant} = route.params || {};
   const [reviews, setReviews] = useState([]);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchReviews();
@@ -39,7 +42,12 @@ const ProductDetail = ({route, navigation}) => {
   };
 
   const handleAddToCart = () => {
-    // Add your cart logic here
+    dispatch(
+      addItem({
+        ...plant,
+        quantity: selectedQuantity,
+      }),
+    );
     navigation.navigate('CartScreen');
   };
 
@@ -77,7 +85,7 @@ const ProductDetail = ({route, navigation}) => {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} bounces={false}>
       <View style={styles.imageContainer}>
         <Image
           source={{uri: `${API_BASE_URL}${plant.image_url}`}}
@@ -141,9 +149,7 @@ const ProductDetail = ({route, navigation}) => {
             style={styles.loader}
           />
         ) : reviews.length > 0 ? (
-          reviews.map(review => (
-            <ReviewCard key={review.order_id} review={review} />
-          ))
+          reviews.map(review => <ReviewCard review={review} />)
         ) : (
           <View style={styles.noReviews}>
             <Icon

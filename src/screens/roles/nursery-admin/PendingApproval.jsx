@@ -9,11 +9,9 @@ import {
 } from 'react-native';
 
 const NurseryPendingApproval = ({navigation}) => {
-  // Animation setup for the clock
   const spinValue = new Animated.Value(0);
 
   React.useEffect(() => {
-    // Spinning animation for clock
     Animated.loop(
       Animated.timing(spinValue, {
         toValue: 1,
