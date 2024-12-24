@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {appTheme} from '../config/constants'; // Assuming constants contains the colors
+import {appTheme} from '../config/constants';
 
 const ChatInput = ({onSend, disabled}) => {
   const [input, setInput] = useState('');

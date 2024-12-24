@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import {View, ActivityIndicator, Text, StyleSheet} from 'react-native';
 import {appTheme} from '../config/constants';
 
 const LoadingOverlay = ({visible, message = 'Logging in'}) => {
