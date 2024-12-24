@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 import LogoutModal from '../../../components/LogoutModal';
 
 const DeliveryManDashboard = ({navigation}) => {

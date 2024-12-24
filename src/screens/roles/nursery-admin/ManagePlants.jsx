@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {appTheme} from '../../../config/constants';
 import * as ImagePicker from 'react-native-image-picker';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 
 const ManagePlants = ({navigation}) => {
   const [plants, setPlants] = useState([]);

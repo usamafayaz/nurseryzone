@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
 import {Picker} from '@react-native-picker/picker';
 import {appTheme} from '../../../config/constants';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 
 const OrderDetails = () => {
   const [orders, setOrders] = useState([]);

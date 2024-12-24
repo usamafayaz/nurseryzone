@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import * as ImagePicker from 'react-native-image-picker';
 import {appTheme} from '../../../config/constants';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 import InputField from '../../../components/InputField';
 
 const AddPlant = () => {

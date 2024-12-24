@@ -3,7 +3,7 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {appTheme} from '../config/constants';
-import API_BASE_URL from '../utils/apiConfig';
+import {API_BASE_URL} from '../utils/apiConfig';
 
 const ProductCard = ({plant}) => {
   const navigation = useNavigation();

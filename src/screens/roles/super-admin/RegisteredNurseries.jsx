@@ -12,7 +12,7 @@ import {
   FlatList,
 } from 'react-native';
 import {appTheme} from '../../../config/constants';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 
 const RegisteredNurseries = () => {
   const [registeredNurseries, setRegisteredNurseries] = useState([]);

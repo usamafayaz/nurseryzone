@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {appTheme} from '../../../config/constants';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 import InputField from '../../../components/InputField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

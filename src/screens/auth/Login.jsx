@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,18 +7,22 @@ import {
   Image,
   ScrollView,
   ToastAndroid,
+  Modal,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import InputField from '../../components/InputField';
 import {appTheme} from '../../config/constants';
-import API_BASE_URL from '../../utils/apiConfig';
+import {API_BASE_URL, updateAPIUrl} from '../../utils/apiConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingOverlay from '../../components/LoadingOverlay';
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('baghban@gmail.com');
+  const [email, setEmail] = useState('sarmad@gmail.com');
   const [password, setPassword] = useState('userpassword');
   const [loading, setLoading] = useState(false);
+  const [apiModalVisible, setApiModalVisible] = useState(false);
+  const [apiAddress, setApiAddress] = useState('');
+  const [currentIP, setCurrentIP] = useState('');
 
   const handleLogin = async () => {
     setLoading(true);
@@ -102,12 +106,51 @@ const Login = ({navigation}) => {
     }
   };
 
+  useEffect(() => {
+    const fetchIPAddress = async () => {
+      try {
+        const ipAddress = await AsyncStorage.getItem('IPAddress');
+        if (ipAddress !== null) {
+          setCurrentIP(ipAddress);
+          setApiAddress(ipAddress);
+        } else {
+          setCurrentIP('Not Set');
+        }
+      } catch (error) {
+        console.error('Error fetching IP address:', error);
+      }
+    };
+    fetchIPAddress();
+    updateAPIUrl();
+  }, []);
+
+  const saveApiAddress = async () => {
+    try {
+      if (!apiAddress) {
+        ToastAndroid.show('Please enter an IP address.', ToastAndroid.SHORT);
+        return;
+      }
+      await AsyncStorage.setItem('IPAddress', apiAddress);
+      setApiModalVisible(false);
+      setCurrentIP(apiAddress);
+      updateAPIUrl();
+      ToastAndroid.show('IP Address changed successfully.', ToastAndroid.SHORT);
+    } catch (error) {
+      console.error('Error saving API address to AsyncStorage:', error);
+    }
+  };
+
   return (
     <ScrollView
       style={[
         styles.container,
         {backgroundColor: appTheme.colors.primaryBackground},
       ]}>
+      <TouchableOpacity
+        style={styles.ipButton}
+        onPress={() => setApiModalVisible(true)}>
+        <Text style={styles.ipButtonText}>IP</Text>
+      </TouchableOpacity>
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Image
@@ -176,6 +219,34 @@ const Login = ({navigation}) => {
         </View>
       </View>
       <LoadingOverlay visible={loading} />
+      <Modal
+        visible={apiModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setApiModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalWrapper}>
+            <Text style={styles.modalHeaderStyle}>Change IP Address</Text>
+            <Text style={styles.hintText}>Current IP: {currentIP}</Text>
+            <Text style={styles.hintText}>IP Address:</Text>
+
+            <InputField
+              placeholder="Enter IP Address"
+              value={apiAddress}
+              onChangeText={setApiAddress}
+              iconName="lock"
+            />
+            <View style={styles.modalButtonWrapper}>
+              <TouchableOpacity onPress={() => setApiModalVisible(false)}>
+                <Text style={styles.cancelStyle}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={saveApiAddress}>
+                <Text style={styles.OKStyle}>Done</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -247,6 +318,74 @@ const styles = StyleSheet.create({
   },
   footerLink: {
     fontFamily: appTheme.fontFamilies.bold,
+  },
+  ipButton: {
+    backgroundColor: appTheme.colors.primary,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
+    position: 'absolute',
+    right: 20,
+    top: 20,
+  },
+  ipButtonText: {
+    color: appTheme.colors.primaryBackground,
+    fontSize: appTheme.fontSizes.small,
+    fontFamily: appTheme.fontFamilies.bold,
+  },
+  modalWrapper: {
+    backgroundColor: appTheme.colors.primaryBackground,
+    borderRadius: 16,
+    padding: 20,
+    width: '90%',
+    alignSelf: 'center',
+  },
+  modalHeaderStyle: {
+    fontSize: appTheme.fontSizes.large,
+    fontFamily: appTheme.fontFamilies.bold,
+    color: appTheme.colors.primary,
+    marginBottom: 20,
+  },
+  modalButtonWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+  },
+  cancelStyle: {
+    color: appTheme.colors.secondaryText,
+    marginRight: 20,
+    fontSize: appTheme.fontSizes.medium,
+    fontFamily: appTheme.fontFamilies.bold,
+  },
+  OKStyle: {
+    color: appTheme.colors.primaryBackground,
+    backgroundColor: appTheme.colors.primary,
+    borderRadius: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    fontSize: appTheme.fontSizes.medium,
+    fontFamily: appTheme.fontFamilies.bold,
+  },
+  hintText: {
+    color: appTheme.colors.secondaryText,
+    fontSize: appTheme.fontSizes.medium,
+    fontFamily: appTheme.fontFamilies.regular,
+    marginBottom: 10,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalWrapper: {
+    backgroundColor: appTheme.colors.primaryBackground,
+    borderRadius: 16,
+    padding: 20,
+    width: '90%',
+    elevation: 5,
   },
 });
 

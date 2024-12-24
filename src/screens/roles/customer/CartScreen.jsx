@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 import {appTheme} from '../../../config/constants';
 
 const CartScreen = ({navigation}) => {

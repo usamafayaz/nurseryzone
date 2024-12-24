@@ -11,7 +11,7 @@ import {
 import {CommonActions} from '@react-navigation/native';
 import InputField from '../../components/InputField';
 import {appTheme} from '../../config/constants';
-import API_BASE_URL from '../../utils/apiConfig';
+import {API_BASE_URL} from '../../utils/apiConfig';
 
 const Signup = ({navigation, route}) => {
   const [userInfo, setUserInfo] = useState({

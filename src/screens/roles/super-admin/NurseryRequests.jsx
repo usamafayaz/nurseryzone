@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 
 const NurseryRequests = ({navigation}) => {
   const [selectedNursery, setSelectedNursery] = useState(null);

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
-import API_BASE_URL from '../../../utils/apiConfig';
+import {API_BASE_URL} from '../../../utils/apiConfig';
 import {useNavigation} from '@react-navigation/native';
 import ProductCard from '../../../components/ProductCard';
 import CustomerHeader from './Header';
