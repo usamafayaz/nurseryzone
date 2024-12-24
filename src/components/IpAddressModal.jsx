@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   cancelStyle: {
     color: appTheme.colors.secondaryText,
     marginRight: 20,
+    paddingVertical: 10,
     fontSize: appTheme.fontSizes.medium,
     fontFamily: appTheme.fontFamilies.bold,
   },

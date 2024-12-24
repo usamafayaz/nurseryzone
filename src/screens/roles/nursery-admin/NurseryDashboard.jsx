@@ -34,12 +34,12 @@ const NurseryDashboard = ({navigation}) => {
       screen: 'Manage Plants',
     },
     {
-      title: 'Orders',
+      title: 'Manage Orders',
       description: 'Track and manage customer orders',
-      screen: 'Order Details',
+      screen: 'Manage Orders',
     },
     {
-      title: 'Reviews',
+      title: 'Customer Reviews',
       description: 'Monitor customer feedback and ratings',
       screen: 'Reviews',
     },

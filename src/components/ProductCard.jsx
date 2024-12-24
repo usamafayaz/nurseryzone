@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
@@ -52,7 +52,6 @@ const ProductCard = ({plant}) => {
 };
 
 const styles = StyleSheet.create({
-  // ProductCard styles
   card: {
     flex: 1,
     margin: 8,

@@ -7,7 +7,6 @@ import {
   Image,
   ScrollView,
   ToastAndroid,
-  Modal,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import InputField from '../../components/InputField';
@@ -16,6 +15,7 @@ import {API_BASE_URL, updateAPIUrl} from '../../utils/apiConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import IPAddressModal from '../../components/IpAddressModal';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('sarmad@gmail.com');
@@ -151,7 +151,11 @@ const Login = ({navigation}) => {
       <TouchableOpacity
         style={styles.ipButton}
         onPress={() => setApiModalVisible(true)}>
-        <Text style={styles.ipButtonText}>IP</Text>
+        <Icon
+          name="settings"
+          size={20}
+          color={appTheme.colors.primaryBackground}
+        />
       </TouchableOpacity>
       <View style={styles.content}>
         <View style={styles.logoContainer}>
@@ -302,20 +306,23 @@ const styles = StyleSheet.create({
     fontFamily: appTheme.fontFamilies.bold,
   },
   ipButton: {
-    backgroundColor: appTheme.colors.primary,
-    width: 40,
-    height: 40,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 100,
+    backgroundColor: appTheme.colors.primary,
+    height: 40,
+    width: 40,
+    borderRadius: 999,
     position: 'absolute',
     right: 20,
     top: 20,
+    zIndex: 1,
   },
   ipButtonText: {
     color: appTheme.colors.primaryBackground,
     fontSize: appTheme.fontSizes.small,
-    fontFamily: appTheme.fontFamilies.bold,
+    fontFamily: appTheme.fontFamilies.medium,
+    marginLeft: 8,
   },
 });
 

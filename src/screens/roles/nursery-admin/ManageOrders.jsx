@@ -14,7 +14,7 @@ import {Picker} from '@react-native-picker/picker';
 import {appTheme} from '../../../config/constants';
 import {API_BASE_URL} from '../../../utils/apiConfig';
 
-const OrderDetails = () => {
+const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
   const [deliveryBoys, setDeliveryBoys] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -433,4 +433,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderDetails;
+export default ManageOrders;

@@ -1,4 +1,3 @@
-// src/navigation/AppNavigator.js
 import React from 'react';
 import {StatusBar} from 'react-native';
 
@@ -13,7 +12,7 @@ import Signup from '../screens/auth/Signup';
 import NurseryDashboard from '../screens/roles/nursery-admin/NurseryDashboard';
 import AddPlant from '../screens/roles/nursery-admin/AddPlant';
 import ManagePlants from '../screens/roles/nursery-admin/ManagePlants';
-import OrderDetails from '../screens/roles/nursery-admin/OrderDetails';
+import ManageOrders from '../screens/roles/nursery-admin/ManageOrders';
 import Reviews from '../screens/roles/nursery-admin/Reviews';
 import ChatBot from '../screens/roles/customer/ChatScreen';
 import NurseryPendingApproval from '../screens/roles/nursery-admin/PendingApproval';
@@ -57,7 +56,7 @@ const AppNavigator = () => {
         <Stack.Screen name="NurseryDashboard" component={NurseryDashboard} />
         <Stack.Screen name="Add Plant" component={AddPlant} />
         <Stack.Screen name="Manage Plants" component={ManagePlants} />
-        <Stack.Screen name="Order Details" component={OrderDetails} />
+        <Stack.Screen name="Manage Orders" component={ManageOrders} />
         <Stack.Screen name="Reviews" component={Reviews} />
         <Stack.Screen name="Chat Bot" component={ChatBot} />
         <Stack.Screen
