@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingOverlay from '../../components/LoadingOverlay';
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('sarmad@gmail.com');
+  const [email, setEmail] = useState('baghban@gmail.com');
   const [password, setPassword] = useState('userpassword');
   const [loading, setLoading] = useState(false);
 

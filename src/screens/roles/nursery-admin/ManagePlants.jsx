@@ -7,9 +7,8 @@ import {
   Image,
   TextInput,
   Modal,
-  ScrollView,
   StyleSheet,
-  Alert,
+  ToastAndroid,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +19,7 @@ import API_BASE_URL from '../../../utils/apiConfig';
 const ManagePlants = ({navigation}) => {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [imageSelected, setImageSelected] = useState(false);
   const [modalPlant, setModalPlant] = useState(null);
 
   useEffect(() => {
@@ -35,6 +35,7 @@ const ManagePlants = ({navigation}) => {
       response => {
         if (!response.didCancel && !response.error) {
           setModalPlant({...modalPlant, image: response.assets[0]});
+          setImageSelected(true);
         }
       },
     );
@@ -76,28 +77,40 @@ const ManagePlants = ({navigation}) => {
     }
   };
 
-  const handleModalSave = async () => {
-    try {
-      // Validate required fields
-      const requiredFields = ['name', 'description', 'price', 'stock'];
-      const missingFields = requiredFields.filter(field => !modalPlant[field]);
+  const validateFields = () => {
+    const requiredFields = {
+      name: 'Plant Name',
+      description: 'Description',
+      price: 'Price',
+      stock: 'Stock',
+    };
 
-      if (missingFields.length > 0) {
-        Alert.alert('Error', `Please fill in: ${missingFields.join(', ')}`);
-        return;
+    for (const [field, label] of Object.entries(requiredFields)) {
+      if (!modalPlant[field]) {
+        ToastAndroid.show(`Please fill in ${label}`, ToastAndroid.SHORT);
+        return false;
       }
+    }
+    if (!modalPlant.image || !modalPlant.currentImage) {
+      ToastAndroid.show('Please select an image', ToastAndroid.SHORT);
+      return false;
+    }
 
-      // Create FormData object
+    return true;
+  };
+
+  const handleModalSave = async () => {
+    if (!validateFields()) return;
+
+    try {
       const formData = new FormData();
 
-      // Append all required fields
       formData.append('plant_id', modalPlant.plant_id.toString());
       formData.append('name', modalPlant.name);
       formData.append('description', modalPlant.description);
       formData.append('price', modalPlant.price.toString());
       formData.append('stock', parseInt(modalPlant.stock).toString());
 
-      // Handle image
       if (modalPlant.image) {
         formData.append('image', {
           uri: modalPlant.image.uri,
@@ -106,7 +119,6 @@ const ManagePlants = ({navigation}) => {
         });
       }
 
-      // Get nursery data for authorization if needed
       const nurseryData = await AsyncStorage.getItem('userData');
       const nursery = JSON.parse(nurseryData);
 
@@ -115,8 +127,6 @@ const ManagePlants = ({navigation}) => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
-          // Add any authorization headers if required
-          // 'Authorization': `Bearer ${nursery.token}`,
         },
         body: formData,
       });
@@ -127,9 +137,8 @@ const ManagePlants = ({navigation}) => {
         throw new Error(responseData.message || 'Failed to update plant');
       }
 
-      Alert.alert('Success', 'Plant updated successfully');
+      ToastAndroid.show('Plant updated successfully', ToastAndroid.SHORT);
 
-      // Update local state
       setPlants(prevPlants =>
         prevPlants.map(plant =>
           plant.plant_id === modalPlant.plant_id ? responseData : plant,
@@ -137,10 +146,13 @@ const ManagePlants = ({navigation}) => {
       );
 
       handleModalClose();
-      await fetchPlants(); // Refresh the list
+      await fetchPlants();
     } catch (error) {
       console.error('Error updating plant:', error);
-      Alert.alert('Error', error.message || 'Failed to update plant');
+      ToastAndroid.show(
+        error.message || 'Failed to update plant',
+        ToastAndroid.SHORT,
+      );
     }
   };
 
@@ -220,12 +232,14 @@ const ManagePlants = ({navigation}) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Edit Plant Details</Text>
+            <Text style={styles.description}>Plant Name</Text>
             <TextInput
               style={styles.input}
               value={modalPlant?.name}
               onChangeText={text => setModalPlant({...modalPlant, name: text})}
               placeholder="Plant Name"
             />
+            <Text style={styles.description}>Plant Description</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
               value={modalPlant?.description}
@@ -235,7 +249,9 @@ const ManagePlants = ({navigation}) => {
               placeholder="Description"
               multiline
             />
+
             <View style={styles.inputRow}>
+              <Text style={styles.description}>Price</Text>
               <TextInput
                 style={[styles.input, styles.halfInput]}
                 value={modalPlant?.price?.toString()}
@@ -245,6 +261,8 @@ const ManagePlants = ({navigation}) => {
                 placeholder="Price"
                 keyboardType="numeric"
               />
+              <Text style={styles.description}>Stock</Text>
+
               <TextInput
                 style={[styles.input, styles.halfInput]}
                 value={modalPlant?.stock?.toString()}
@@ -254,12 +272,12 @@ const ManagePlants = ({navigation}) => {
                 placeholder="Stock"
                 keyboardType="numeric"
               />
-              <TouchableOpacity
-                style={styles.imagePickerButton}
-                onPress={handleImagePick}>
-                <Text style={styles.imagePickerText}>Choose Image</Text>
-              </TouchableOpacity>
             </View>
+            <TouchableOpacity style={styles.input} onPress={handleImagePick}>
+              <Text style={styles.description}>
+                {imageSelected ? 'Image Selected' : 'Choose Image'}
+              </Text>
+            </TouchableOpacity>
             <View style={styles.modalActions}>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -422,6 +440,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 12,
     fontSize: appTheme.fontSizes.medium,
+    justifyContent: 'center',
   },
   textArea: {
     height: 100,
@@ -430,6 +449,7 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   halfInput: {
     flex: 0.48,
