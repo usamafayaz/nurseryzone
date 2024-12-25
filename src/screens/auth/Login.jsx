@@ -18,8 +18,8 @@ import IPAddressModal from '../../components/IpAddressModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('sarmad@gmail.com');
-  const [password, setPassword] = useState('userpassword');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [apiModalVisible, setApiModalVisible] = useState(false);
   const [apiAddress, setApiAddress] = useState('');
@@ -48,7 +48,7 @@ const Login = ({navigation}) => {
         );
         return;
       }
-
+      // console.log(`${API_BASE_URL}/login?email=${email}&password=${password}`);
       const response = await fetch(
         `${API_BASE_URL}/login?email=${email}&password=${password}`,
       );

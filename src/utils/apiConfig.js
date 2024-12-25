@@ -7,7 +7,7 @@ const fetchIPAddress = async () => {
   try {
     const ipAddress = await AsyncStorage.getItem('IPAddress');
     if (ipAddress) {
-      API_BASE_URL = `http://${ipAddress}:8000/api`;
+      API_BASE_URL = `http://${ipAddress}/api`;
     }
   } catch (error) {
     ToastAndroid.show('Error fetching IP address:', ToastAndroid.SHORT);

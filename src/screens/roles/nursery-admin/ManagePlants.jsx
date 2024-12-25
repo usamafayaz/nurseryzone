@@ -238,6 +238,7 @@ const ManagePlants = ({navigation}) => {
               value={modalPlant?.name}
               onChangeText={text => setModalPlant({...modalPlant, name: text})}
               placeholder="Plant Name"
+              placeholderTextColor={appTheme.colors.secondaryText}
             />
             <Text style={styles.description}>Plant Description</Text>
             <TextInput
@@ -247,6 +248,7 @@ const ManagePlants = ({navigation}) => {
                 setModalPlant({...modalPlant, description: text})
               }
               placeholder="Description"
+              placeholderTextColor={appTheme.colors.secondaryText}
               multiline
             />
 
@@ -259,6 +261,7 @@ const ManagePlants = ({navigation}) => {
                   setModalPlant({...modalPlant, price: text})
                 }
                 placeholder="Price"
+                placeholderTextColor={appTheme.colors.secondaryText}
                 keyboardType="numeric"
               />
               <Text style={styles.description}>Stock</Text>
@@ -270,6 +273,7 @@ const ManagePlants = ({navigation}) => {
                   setModalPlant({...modalPlant, stock: text})
                 }
                 placeholder="Stock"
+                placeholderTextColor={appTheme.colors.secondaryText}
                 keyboardType="numeric"
               />
             </View>

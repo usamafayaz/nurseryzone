@@ -21,7 +21,9 @@ const IPAddressModal = ({
         <View style={styles.modalWrapper}>
           <Text style={styles.modalHeaderStyle}>Change IP Address</Text>
           <Text style={styles.hintText}>Current IP: {currentIP}</Text>
-          <Text style={[styles.hintText, {marginTop: 20}]}>IP Address:</Text>
+          <Text style={[styles.hintText, {marginTop: 20}]}>
+            IP Address:Port
+          </Text>
 
           <InputField
             placeholder="Enter IP Address"
