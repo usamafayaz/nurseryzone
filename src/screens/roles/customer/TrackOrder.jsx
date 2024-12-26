@@ -172,11 +172,14 @@ const TrackOrders = () => {
         <>
           <View style={styles.header}>
             <Icon
-              name="format-list-bulleted"
+              name="arrow-left"
               size={28}
               color={colors.primary}
+              onPress={() => {
+                navigation.goBack();
+              }}
             />
-            <Text style={styles.headerText}>My Orders</Text>
+            <Text style={styles.headerText}>Track Orders</Text>
           </View>
 
           <FlatList
@@ -251,7 +254,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.secondaryBackground,
   },
-
   header: {
     flexDirection: 'row',
     alignItems: 'center',

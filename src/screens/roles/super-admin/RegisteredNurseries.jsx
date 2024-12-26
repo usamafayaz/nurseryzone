@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import {appTheme} from '../../../config/constants';
 import {API_BASE_URL} from '../../../utils/apiConfig';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 
 const RegisteredNurseries = () => {
   const [registeredNurseries, setRegisteredNurseries] = useState([]);
@@ -22,7 +24,7 @@ const RegisteredNurseries = () => {
   useEffect(() => {
     getNurseries();
   }, []);
-
+  const navigation = useNavigation();
   const getNurseries = async () => {
     setLoading(true);
     try {
@@ -116,10 +118,20 @@ const RegisteredNurseries = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Registered Nurseries</Text>
-        <Text style={styles.headerSubtitle}>
-          Manage and view all registered nurseries
-        </Text>
+        <Icon
+          name="keyboard-arrow-left"
+          size={24}
+          color={appTheme.colors.primaryBackground}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={{marginLeft: 20}}>
+          <Text style={styles.headerTitle}>Registered Nurseries</Text>
+          <Text style={styles.headerSubtitle}>
+            Manage and view all registered nurseries
+          </Text>
+        </View>
       </View>
 
       {loading ? (
@@ -153,6 +165,8 @@ const styles = StyleSheet.create({
     backgroundColor: appTheme.colors.primary,
     padding: 16,
     paddingTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   headerTitle: {
     color: 'white',

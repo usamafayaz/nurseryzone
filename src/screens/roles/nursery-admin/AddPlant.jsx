@@ -90,7 +90,14 @@ const AddPlant = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Icon name="home" size={24} color={appTheme.colors.primaryBackground} />
+        <Icon
+          name="arrow-left"
+          size={24}
+          color={appTheme.colors.primaryBackground}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
         <Text style={styles.headerTitle}>Add Plants</Text>
       </View>
 

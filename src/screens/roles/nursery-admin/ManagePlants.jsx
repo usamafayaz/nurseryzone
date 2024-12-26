@@ -188,7 +188,14 @@ const ManagePlants = ({navigation}) => {
   const renderHeader = () => (
     <View style={styles.header}>
       <View style={styles.headerContent}>
-        <Icon name="eco" size={24} color="white" />
+        <Icon
+          name="keyboard-arrow-left"
+          size={30}
+          color="white"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
         <Text style={styles.headerTitle}>Plant Inventory</Text>
       </View>
       <TouchableOpacity

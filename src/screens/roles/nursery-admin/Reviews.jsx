@@ -10,6 +10,8 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {appTheme} from '../../../config/constants';
 import {API_BASE_URL} from '../../../utils/apiConfig';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -18,7 +20,7 @@ const Reviews = () => {
   useEffect(() => {
     fetchReviews();
   }, []);
-
+  const navigation = useNavigation();
   const fetchReviews = async () => {
     try {
       const userData = await AsyncStorage.getItem('userData');
@@ -75,6 +77,14 @@ const Reviews = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
+          <Icon
+            name="arrow-left"
+            size={24}
+            color={appTheme.colors.primaryBackground}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle}>Customer Reviews</Text>
             <Text style={styles.headerSubtitle}>

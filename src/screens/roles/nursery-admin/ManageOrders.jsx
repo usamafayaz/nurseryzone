@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {Picker} from '@react-native-picker/picker';
 import {appTheme} from '../../../config/constants';
 import {API_BASE_URL} from '../../../utils/apiConfig';
+import {useNavigation} from '@react-navigation/native';
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -20,7 +21,7 @@ const ManageOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const statusOptions = ['Pending', 'Processing', 'Shipped'];
-
+  const navigation = useNavigation();
   useEffect(() => {
     fetchData();
   }, []);
@@ -231,12 +232,15 @@ const ManageOrders = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Icon
-          name="package"
+          name="arrow-left"
           size={24}
           color={appTheme.colors.primaryBackground}
+          onPress={() => {
+            navigation.goBack();
+          }}
         />
         <View>
-          <Text style={styles.headerTitle}>Order Details</Text>
+          <Text style={styles.headerTitle}>Manage Customer Orders</Text>
           <Text style={styles.headerSubtitle}>
             View and manage customer orders
           </Text>

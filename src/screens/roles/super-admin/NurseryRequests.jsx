@@ -200,10 +200,20 @@ const NurseryRequests = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Nursery Requests</Text>
-        <Text style={styles.headerSubtitle}>
-          Review and manage nursery registrations
-        </Text>
+        <MaterialIcons
+          name="keyboard-arrow-left"
+          size={24}
+          color={appTheme.colors.primaryBackground}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={{marginLeft: 20}}>
+          <Text style={styles.headerTitle}>Nursery Requests</Text>
+          <Text style={styles.headerSubtitle}>
+            Review and manage nursery registrations
+          </Text>
+        </View>
       </View>
 
       {loading ? (
@@ -234,6 +244,8 @@ const styles = StyleSheet.create({
     backgroundColor: appTheme.colors.primary,
     padding: 16,
     paddingTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   headerTitle: {
     color: 'white',

@@ -86,11 +86,22 @@ const ProductDetail = ({route, navigation}) => {
 
   return (
     <ScrollView style={styles.container} bounces={false}>
+      <View style={styles.header}>
+        <Icon
+          name="keyboard-arrow-left"
+          size={28}
+          color={appTheme.colors.primaryBackground}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <Text style={styles.headerText}>Product Detail</Text>
+      </View>
       <View style={styles.imageContainer}>
         <Image
           source={{uri: `${API_BASE_URL}${plant.image_url}`}}
           style={styles.image}
-          resizeMode="contain"
+          resizeMode="stretch"
         />
       </View>
 
@@ -173,6 +184,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: appTheme.colors.primaryBackground,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: appTheme.colors.primary,
+  },
+  headerText: {
+    fontSize: appTheme.fontSizes.xlarge,
+    fontFamily: appTheme.fontFamilies.bold,
+    fontWeight: 'bold',
+    marginLeft: 16,
+    color: appTheme.colors.primaryBackground,
+  },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -184,8 +208,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    borderRadius: 20, // Add this
+    overflow: 'hidden', // Add this
   },
   image: {
+    borderRadius: 20,
     width: '100%',
     height: '100%',
   },

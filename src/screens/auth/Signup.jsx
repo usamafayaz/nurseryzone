@@ -72,7 +72,9 @@ const Signup = ({navigation, route}) => {
           iconName="person"
           value={userInfo.name}
           onChangeText={value => handleInputChange('name', value)}
-          placeholder="Enter your name"
+          placeholder={
+            role == 'Cusomter' ? 'Enter your name' : 'Enter Nursery Name'
+          }
           keyboardType="text"
         />
         <InputField
