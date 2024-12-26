@@ -11,15 +11,16 @@ import {
 import {CommonActions} from '@react-navigation/native';
 import InputField from '../../components/InputField';
 import {appTheme} from '../../config/constants';
-import {API_BASE_URL, updateAPIUrl} from '../../utils/apiConfig';
+import {updateAPIUrl} from '../../utils/apiConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import IPAddressModal from '../../components/IpAddressModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import auth from '../../services/auth';
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('sarmad@gmail.com');
+  const [password, setPassword] = useState('userpassword');
   const [loading, setLoading] = useState(false);
   const [apiModalVisible, setApiModalVisible] = useState(false);
   const [apiAddress, setApiAddress] = useState('');
@@ -28,80 +29,50 @@ const Login = ({navigation}) => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      if (!email.trim() || !password.trim()) {
-        ToastAndroid.show(
-          'Please enter username and password.',
-          ToastAndroid.SHORT,
-        );
+      const result = await auth.login(email, password);
+      if (result.status === 'pendingApproval') {
+        navigation.navigate('Pending Approval');
         return;
       }
-      if (
-        email.trim() === 'admin@gmail.com' &&
-        password.trim() === 'admin123'
-      ) {
-        ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{name: 'AdminDashboard'}],
-          }),
-        );
-        return;
-      }
-      // console.log(`${API_BASE_URL}/login?email=${email}&password=${password}`);
-      const response = await fetch(
-        `${API_BASE_URL}/login?email=${email}&password=${password}`,
-      );
-
-      if (!response.ok) {
-        if (response.status === 403) {
-          const errorData = await response.json();
-          if (errorData.detail === 'Permission denied') {
-            navigation.navigate('Pending Approval');
-            return;
-          }
-        }
-        ToastAndroid.show(
-          'Invalid credentials. Please try again.',
-          ToastAndroid.SHORT,
-        );
-        return;
-      }
-
-      const result = await response.json();
-
-      AsyncStorage.setItem('userData', JSON.stringify(result));
       ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
-
-      const role = result.role.toLowerCase();
-      if (role === 'nursery') {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{name: 'NurseryDashboard'}],
-          }),
-        );
-      } else if (role === 'customer') {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{name: 'CustomerDashboard'}],
-          }),
-        );
-      } else if (role === 'deliveryboy') {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{name: 'DeliveryManDashboard'}],
-          }),
-        );
+      switch (result.role.toLowerCase()) {
+        case 'admin':
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'AdminDashboard'}],
+            }),
+          );
+          break;
+        case 'customer':
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'CustomerDashboard'}],
+            }),
+          );
+          break;
+        case 'deliveryboy':
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'DeliveryManDashboard'}],
+            }),
+          );
+          break;
+        case 'nursery':
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'NurseryDashboard'}],
+            }),
+          );
+          break;
+        default:
+          break;
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      ToastAndroid.show(
-        'Something went wrong. Please try again later.',
-        ToastAndroid.SHORT,
-      );
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     } finally {
       setLoading(false);
     }

@@ -6,18 +6,20 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import {appTheme} from '../../../config/constants';
 import {removeItem} from '../../../redux/cartSlice';
+import customerSideApi from '../../../services/customerSideApi';
 
 const CheckoutScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('COD');
   const cartItems = useSelector(state => state.cart.items);
+  const {getImageUrl, placeCustomerOrder} = customerSideApi;
 
   useEffect(() => {
     loadUserData();
@@ -41,24 +43,18 @@ const CheckoutScreen = ({navigation}) => {
 
   const handleSubmitOrder = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/order`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: userData.user_id,
-          plant_id: cartItems[0].plant_id,
-          quantity: cartItems[0].quantity,
-        }),
+      const data = JSON.stringify({
+        user_id: userData.user_id,
+        plant_id: cartItems[0].plant_id,
+        quantity: cartItems[0].quantity,
       });
-
-      if (response.ok) {
+      const response = await placeCustomerOrder(data);
+      if (response == true) {
         dispatch(removeItem(cartItems[0].plant_id));
-        navigation.navigate('OrderSuccess');
+        navigation.replace('OrderSuccess');
       }
     } catch (error) {
-      console.error('Order submission error:', error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };
 
@@ -149,7 +145,7 @@ const CheckoutScreen = ({navigation}) => {
         {cartItems.map(item => (
           <View key={item.plant_id} style={styles.orderItem}>
             <Image
-              source={{uri: `${API_BASE_URL}${item.image_url}`}}
+              source={{uri: getImageUrl(item.image_url)}}
               style={styles.itemImage}
             />
             <View style={styles.itemDetails}>

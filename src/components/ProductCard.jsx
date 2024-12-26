@@ -3,7 +3,7 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {appTheme} from '../config/constants';
-import {API_BASE_URL} from '../utils/apiConfig';
+import customerSideApi from '../services/customerSideApi';
 
 const ProductCard = ({plant}) => {
   const navigation = useNavigation();
@@ -18,7 +18,7 @@ const ProductCard = ({plant}) => {
       onPress={handleViewDetails}
       activeOpacity={0.9}>
       <Image
-        source={{uri: `${API_BASE_URL}${plant.image_url}`}}
+        source={{uri: customerSideApi.getImageUrl(plant.image_url)}}
         style={styles.image}
         resizeMode="cover"
       />

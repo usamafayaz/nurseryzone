@@ -8,10 +8,10 @@ import {
   FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import {appTheme} from '../../../config/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {removeItem, updateItemQuantity} from '../../../redux/cartSlice';
+import customerSideApi from '../../../services/customerSideApi';
 
 const CartScreen = ({navigation}) => {
   const cart = useSelector(state => state.cart.items);
@@ -33,7 +33,7 @@ const CartScreen = ({navigation}) => {
     <View style={styles.cartItem}>
       <View style={styles.itemContent}>
         <Image
-          source={{uri: `${API_BASE_URL}${item.image_url}`}}
+          source={{uri: customerSideApi.getImageUrl(item.image_url)}}
           style={styles.itemImage}
         />
         <View style={styles.itemDetails}>

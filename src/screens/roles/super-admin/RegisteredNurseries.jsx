@@ -12,11 +12,10 @@ import {
   FlatList,
 } from 'react-native';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
+import customerSideApi from '../../../services/adminSideApi';
 
-const RegisteredNurseries = () => {
+const RegisteredNurseries = ({navigation}) => {
   const [registeredNurseries, setRegisteredNurseries] = useState([]);
   const [selectedNursery, setSelectedNursery] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,19 +23,11 @@ const RegisteredNurseries = () => {
   useEffect(() => {
     getNurseries();
   }, []);
-  const navigation = useNavigation();
+
   const getNurseries = async () => {
-    setLoading(true);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/nursery/request?pending_request=false&skip=0&limit=20`,
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setRegisteredNurseries(data);
-      } else {
-        throw new Error('Failed to fetch nurseries');
-      }
+      const {data} = await customerSideApi.getRegisteredNurseries();
+      setRegisteredNurseries(data);
     } catch (error) {
       ToastAndroid.show(
         error.message || 'Failed to fetch nurseries',

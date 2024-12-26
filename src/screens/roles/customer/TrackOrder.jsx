@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
+import customerSideApi from '../../../services/customerSideApi';
 
 const {colors, fontSizes, fontFamilies} = appTheme;
 
@@ -27,7 +27,7 @@ const TrackOrders = () => {
   const [comment, setComment] = useState('');
   const [feedbackSubmitted, setFeedbackSubmitted] = useState({});
   const navigation = useNavigation();
-
+  const {submitCustomerFeedback, fetchMyOrders} = customerSideApi;
   const statusStyles = {
     Pending: {bg: colors.warning + '20', text: colors.warning},
     Processing: {bg: colors.primary + '20', text: colors.primary},
@@ -44,18 +44,9 @@ const TrackOrders = () => {
     try {
       const userData = await AsyncStorage.getItem('userData');
       if (!userData) throw new Error('User data not found');
-
       const {user_id} = JSON.parse(userData);
-      const response = await fetch(
-        `${API_BASE_URL}/order/${user_id}?skip=0&limit=20`,
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setOrders(data.reverse());
-      } else {
-        ToastAndroid.show('Failed to fetch orders', ToastAndroid.SHORT);
-      }
+      const data = await fetchMyOrders(user_id);
+      setOrders(data.reverse());
     } catch (err) {
       ToastAndroid.show(err.message, ToastAndroid.SHORT);
     } finally {
@@ -65,26 +56,26 @@ const TrackOrders = () => {
 
   const handleFeedbackSubmit = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/feedback`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          order_id: selectedOrder.order_id,
-          comment: comment,
-        }),
+      const data = JSON.stringify({
+        order_id: selectedOrder.order_id,
+        comment: comment,
       });
+      const response = await submitCustomerFeedback(data);
+      if (response == true) {
+        ToastAndroid.show(
+          'Feedback Successfully Submitted!',
+          ToastAndroid.SHORT,
+        );
+        setFeedbackSubmitted(prev => ({
+          ...prev,
+          [selectedOrder.order_id]: true,
+        }));
 
-      if (!response.ok) throw new Error('Failed to submit feedback');
-      ToastAndroid.show('Feedback Successfully Submitted!', ToastAndroid.SHORT);
-      setFeedbackSubmitted(prev => ({
-        ...prev,
-        [selectedOrder.order_id]: true,
-      }));
-
-      setShowModal(false);
-      setComment('');
+        setShowModal(false);
+        setComment('');
+      }
     } catch (error) {
-      ToastAndroid.show('Failed to submit feedback', ToastAndroid.SHORT);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };
 

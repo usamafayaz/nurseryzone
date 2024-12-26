@@ -6,15 +6,16 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
+  ToastAndroid,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import {useNavigation} from '@react-navigation/native';
 import ProductCard from '../../../components/ProductCard';
 import CustomerHeader from './Header';
 import LogoutModal from '../../../components/LogoutModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import customerSideApi from '../../../services/customerSideApi';
 
 const CustomerDashboard = () => {
   const [plants, setPlants] = useState([]);
@@ -34,16 +35,11 @@ const CustomerDashboard = () => {
 
   const navigation = useNavigation();
   const fetchPlants = async () => {
-    data = await AsyncStorage.getItem('userData');
-    data = JSON.parse(data);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/nursery/plants?skip=0&limit=20`,
-      );
-      const data = await response.json();
+      const data = await customerSideApi.fetchAllPlants();
       setPlants(data.reverse());
     } catch (error) {
-      console.error('Error:', error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     } finally {
       setLoading(false);
     }

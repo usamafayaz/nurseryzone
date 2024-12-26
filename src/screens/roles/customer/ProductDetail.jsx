@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import {useDispatch} from 'react-redux';
 import {addItem} from '../../../redux/cartSlice';
+import customerSideApi from '../../../services/customerSideApi';
 
 const ProductDetail = ({route, navigation}) => {
   const {plant} = route.params || {};
@@ -20,22 +21,17 @@ const ProductDetail = ({route, navigation}) => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
+  const {fetchProductReviews, getImageUrl} = customerSideApi;
   useEffect(() => {
     fetchReviews();
   }, []);
 
   const fetchReviews = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/feedback/?plant_id=${plant.plant_id}`,
-      );
-      if (response.ok) {
-        const result = await response.json();
-        setReviews(result);
-      }
+      const {data} = await fetchProductReviews(plant.plant_id);
+      setReviews(data);
     } catch (error) {
-      console.log(error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     } finally {
       setLoading(false);
     }
@@ -99,9 +95,9 @@ const ProductDetail = ({route, navigation}) => {
       </View>
       <View style={styles.imageContainer}>
         <Image
-          source={{uri: `${API_BASE_URL}${plant.image_url}`}}
+          source={{uri: getImageUrl(plant.image_url)}}
           style={styles.image}
-          resizeMode="stretch"
+          resizeMode="contain"
         />
       </View>
 
@@ -160,7 +156,9 @@ const ProductDetail = ({route, navigation}) => {
             style={styles.loader}
           />
         ) : reviews.length > 0 ? (
-          reviews.map(review => <ReviewCard review={review} />)
+          reviews.map((review, index) => (
+            <ReviewCard review={review} key={index} />
+          ))
         ) : (
           <View style={styles.noReviews}>
             <Icon
@@ -208,11 +206,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    borderRadius: 20, // Add this
-    overflow: 'hidden', // Add this
   },
   image: {
-    borderRadius: 20,
     width: '100%',
     height: '100%',
   },

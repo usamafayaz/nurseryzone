@@ -12,63 +12,22 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
+import customerSideApi from '../../../services/adminSideApi';
 
 const NurseryRequests = ({navigation}) => {
   const [selectedNursery, setSelectedNursery] = useState(null);
   const [nurseryRequests, setNurseryRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const {fetchNurseryRequests, processNurseryRequest} = customerSideApi;
   useEffect(() => {
-    getNurseryRequests();
+    loadNurseryRequests();
   }, []);
 
-  const handleRequestAction = async (nurseryId, action) => {
-    try {
-      const is_accepted = action === 'accept';
-      const response = await fetch(
-        `${API_BASE_URL}/nursery/request?nursery_id=${nurseryId}&is_accepted=${is_accepted}`,
-        {
-          method: 'POST',
-        },
-      );
-      const result = await response.json();
-
-      if (response.ok) {
-        setNurseryRequests(prev =>
-          prev.filter(req => req.nursery_id !== nurseryId),
-        );
-        setSelectedNursery(null);
-        ToastAndroid.show(
-          `Nursery request ${
-            is_accepted ? 'accepted' : 'rejected'
-          } successfully`,
-          ToastAndroid.SHORT,
-        );
-      } else {
-        throw new Error(result.message || 'Something went wrong');
-      }
-    } catch (error) {
-      ToastAndroid.show(
-        error.message || 'Failed to process request',
-        ToastAndroid.SHORT,
-      );
-    }
-  };
-
-  const getNurseryRequests = async () => {
+  const loadNurseryRequests = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/nursery/request?pending_request=true&skip=0&limit=20`,
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setNurseryRequests(data);
-      } else if (response.status == 404) {
-      } else {
-        throw new Error('Failed to fetch nursery requests');
-      }
+      const data = await fetchNurseryRequests(true, 0, 20);
+      setNurseryRequests(data);
     } catch (error) {
       ToastAndroid.show(
         error.message || 'Failed to fetch nursery requests',
@@ -76,6 +35,27 @@ const NurseryRequests = ({navigation}) => {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRequestAction = async (nurseryId, action) => {
+    try {
+      const isAccepted = action === 'accept';
+      await processNurseryRequest(nurseryId, isAccepted);
+
+      setNurseryRequests(prev =>
+        prev.filter(req => req.nursery_id !== nurseryId),
+      );
+      setSelectedNursery(null);
+      ToastAndroid.show(
+        `Nursery request ${isAccepted ? 'accepted' : 'rejected'} successfully`,
+        ToastAndroid.SHORT,
+      );
+    } catch (error) {
+      ToastAndroid.show(
+        error.message || 'Failed to process request',
+        ToastAndroid.SHORT,
+      );
     }
   };
 

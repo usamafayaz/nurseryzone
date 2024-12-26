@@ -5,12 +5,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 
 import {CommonActions} from '@react-navigation/native';
 import InputField from '../../components/InputField';
 import {appTheme} from '../../config/constants';
-import {API_BASE_URL} from '../../utils/apiConfig';
+import auth from '../../services/auth';
 
 const Signup = ({navigation, route}) => {
   const [userInfo, setUserInfo] = useState({
@@ -22,26 +23,23 @@ const Signup = ({navigation, route}) => {
   });
 
   const role = route.params.role;
-  const handleSignup = async () => {
-    const data = {
-      ...userInfo,
-      is_nursery: role === 'Customer' ? false : true,
-    };
 
-    const response = await fetch(`${API_BASE_URL}/user`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{name: 'Login'}],
-      }),
-    );
+  const handleSignup = async () => {
+    const result = await auth.signup(userInfo, role);
+
+    if (result.success) {
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Login'}],
+        }),
+      );
+    } else {
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
+    }
   };
+
   const handleInputChange = (field, value) => {
     setUserInfo(prev => ({...prev, [field]: value}));
   };
