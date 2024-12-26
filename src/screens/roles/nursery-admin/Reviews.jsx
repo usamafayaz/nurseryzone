@@ -6,12 +6,13 @@ import {
   StyleSheet,
   ActivityIndicator,
   SafeAreaView,
+  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import nurserySideApi from '../../../services/nurserySideApi';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -21,21 +22,15 @@ const Reviews = () => {
     fetchReviews();
   }, []);
   const navigation = useNavigation();
+
   const fetchReviews = async () => {
     try {
       const userData = await AsyncStorage.getItem('userData');
       const nursery = JSON.parse(userData);
-
-      const response = await fetch(
-        `${API_BASE_URL}/feedback/${nursery.user_id}`,
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        setReviews(result);
-      }
+      const data = await nurserySideApi.fetchAllReviews(nursery.user_id);
+      setReviews(data);
     } catch (error) {
-      console.log(error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     } finally {
       setLoading(false);
     }

@@ -6,14 +6,15 @@ import {
   ScrollView,
   SafeAreaView,
   StyleSheet,
+  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import * as ImagePicker from 'react-native-image-picker';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import InputField from '../../../components/InputField';
+import nurserySideApi from '../../../services/nurserySideApi';
 
 const AddPlant = () => {
   const [plantData, setPlantData] = useState({
@@ -46,7 +47,8 @@ const AddPlant = () => {
       !plantData.price ||
       !plantData.image ||
       !plantData.description ||
-      !plantData.stock
+      !plantData.stock ||
+      !plantData.image
     ) {
       setErrors({
         name: !plantData.name ? 'Name is required' : null,
@@ -61,29 +63,16 @@ const AddPlant = () => {
     try {
       const nurseryData = await AsyncStorage.getItem('userData');
       const nursery = JSON.parse(nurseryData);
+      const response = await nurserySideApi.addPlant(
+        nursery.user_id,
+        plantData,
+      );
 
-      const formData = new FormData();
-      formData.append('nursery_id', nursery.user_id);
-      formData.append('name', plantData.name);
-      formData.append('description', plantData.description);
-      formData.append('price', plantData.price);
-      formData.append('stock', plantData.stock);
-      formData.append('image', {
-        uri: plantData.image.uri,
-        type: plantData.image.type,
-        name: plantData.image.fileName,
-      });
-
-      const response = await fetch(`${API_BASE_URL}/nursery/plant`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
+      if (response == true) {
         navigation.replace('Manage Plants');
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };
 

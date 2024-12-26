@@ -6,14 +6,13 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
-  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import LogoutModal from '../../../components/LogoutModal';
+import deliveryManApi from '../../../services/deliveryManApi';
 
 const DeliveryManDashboard = ({navigation}) => {
   const [deliveries, setDeliveries] = useState([]);
@@ -21,7 +20,7 @@ const DeliveryManDashboard = ({navigation}) => {
   const [statusOptions] = useState(['Choose Status', 'Delivered', 'Cancelled']);
   const [userData, setUserData] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
+  const {fetchAssignedDeliveries, updateDeliveryStatus} = deliveryManApi;
   useEffect(() => {
     loadUserData();
   }, []);
@@ -39,12 +38,10 @@ const DeliveryManDashboard = ({navigation}) => {
   };
 
   const fetchDeliveries = async userId => {
+    setLoading(true);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/delivery/schedule?user_id=${userId}`,
-      );
-      const result = await response.json();
-      setDeliveries(result.reverse());
+      const result = await deliveryManApi.fetchAssignedDeliveries(userId);
+      setDeliveries(result);
     } catch (error) {
       console.error(error);
     } finally {
@@ -53,22 +50,12 @@ const DeliveryManDashboard = ({navigation}) => {
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {
-    if (newStatus !== 'Choose Status') {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/order/status?order_id=${orderId}&status=${newStatus}`,
-          {method: 'PUT'},
-        );
-        if (response.ok) {
-          ToastAndroid.show(
-            'Order Status successfully updated!',
-            ToastAndroid.SHORT,
-          );
-          fetchDeliveries(userData.user_id);
-        }
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      await deliveryManApi.updateDeliveryStatus(orderId, newStatus, () =>
+        fetchDeliveries(userData.user_id),
+      );
+    } catch (error) {
+      console.error(error);
     }
   };
 

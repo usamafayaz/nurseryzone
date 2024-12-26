@@ -14,14 +14,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {appTheme} from '../../../config/constants';
 import * as ImagePicker from 'react-native-image-picker';
-import {API_BASE_URL} from '../../../utils/apiConfig';
+import customerSideApi from '../../../services/customerSideApi';
+import nurserySideApi from '../../../services/nurserySideApi';
 
 const ManagePlants = ({navigation}) => {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [imageSelected, setImageSelected] = useState(false);
   const [modalPlant, setModalPlant] = useState(null);
-
+  const {fetchNurseryPlants, deletePlant, editPlant} = nurserySideApi;
   useEffect(() => {
     fetchPlants();
   }, []);
@@ -45,15 +46,10 @@ const ManagePlants = ({navigation}) => {
     try {
       const nurseryData = await AsyncStorage.getItem('userData');
       const nursery = JSON.parse(nurseryData);
-      const response = await fetch(
-        `${API_BASE_URL}/nursery/plants?nursery_id=${nursery.user_id}&skip=0&limit=20`,
-      );
-      const data = await response.json();
-      if (response.ok) {
-        setPlants(data);
-      }
+      const data = await fetchNurseryPlants(nursery.user_id);
+      setPlants(data);
     } catch (error) {
-      console.error('Error:', error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     } finally {
       setLoading(false);
     }
@@ -65,11 +61,10 @@ const ManagePlants = ({navigation}) => {
 
   const handleDelete = async plantId => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/nursery/plant?plant_id=${plantId}`,
-        {method: 'DELETE'},
-      );
-      if (response.ok) {
+      const response = await deletePlant(plantId);
+
+      if (response == true) {
+        ToastAndroid.show('Plant deleted successfully', ToastAndroid.SHORT);
         setPlants(plants.filter(plant => plant.plant_id !== plantId));
       }
     } catch (error) {
@@ -103,50 +98,13 @@ const ManagePlants = ({navigation}) => {
     if (!validateFields()) return;
 
     try {
-      const formData = new FormData();
+      const response = await editPlant(modalPlant);
 
-      formData.append('plant_id', modalPlant.plant_id.toString());
-      formData.append('name', modalPlant.name);
-      formData.append('description', modalPlant.description);
-      formData.append('price', modalPlant.price.toString());
-      formData.append('stock', parseInt(modalPlant.stock).toString());
-
-      if (modalPlant.image) {
-        formData.append('image', {
-          uri: modalPlant.image.uri,
-          type: 'image/jpeg',
-          name: 'plant_image.jpg',
-        });
+      if (response == true) {
+        ToastAndroid.show('Plant updated successfully', ToastAndroid.SHORT);
+        handleModalClose();
+        await fetchPlants();
       }
-
-      const nurseryData = await AsyncStorage.getItem('userData');
-      const nursery = JSON.parse(nurseryData);
-
-      const response = await fetch(`${API_BASE_URL}/nursery/plant`, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      });
-
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.message || 'Failed to update plant');
-      }
-
-      ToastAndroid.show('Plant updated successfully', ToastAndroid.SHORT);
-
-      setPlants(prevPlants =>
-        prevPlants.map(plant =>
-          plant.plant_id === modalPlant.plant_id ? responseData : plant,
-        ),
-      );
-
-      handleModalClose();
-      await fetchPlants();
     } catch (error) {
       console.error('Error updating plant:', error);
       ToastAndroid.show(
@@ -159,7 +117,7 @@ const ManagePlants = ({navigation}) => {
   const renderPlantCard = ({item}) => (
     <View style={styles.card}>
       <Image
-        source={{uri: `${API_BASE_URL}${item.image_url}`}}
+        source={{uri: customerSideApi.getImageUrl(item.image_url)}}
         style={styles.plantImage}
       />
       <View style={styles.cardActions}>
@@ -222,7 +180,7 @@ const ManagePlants = ({navigation}) => {
           <Text style={styles.emptyText}>Start by adding your first plant</Text>
           <TouchableOpacity
             style={styles.emptyAddButton}
-            onPress={() => navigation.replace('AddPlant')}>
+            onPress={() => navigation.replace('Add Plant')}>
             <Text style={styles.emptyAddButtonText}>Add First Plant</Text>
           </TouchableOpacity>
         </View>

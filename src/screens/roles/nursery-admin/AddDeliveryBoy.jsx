@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import InputField from '../../../components/InputField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import nurserySideApi from '../../../services/nurserySideApi';
 
 const AddDeliveryBoy = ({navigation}) => {
   const [deliveryBoyInfo, setDeliveryBoyInfo] = useState({
@@ -26,24 +26,16 @@ const AddDeliveryBoy = ({navigation}) => {
     setDeliveryBoyInfo(prev => ({...prev, [field]: value}));
   };
 
-  const addDeliveryBoy = async () => {
+  const handleAddDeliveryBoy = async () => {
     const storedUserData = JSON.parse(await AsyncStorage.getItem('userData'));
-
     const data = {
       ...deliveryBoyInfo,
       nursery_id: storedUserData.user_id,
     };
-
     try {
-      const response = await fetch(`${API_BASE_URL}/delivery/boy`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await nurserySideApi.addDeliveryBoy(data);
 
-      if (response.ok) {
+      if (response == true) {
         ToastAndroid.show(
           'Delivery Boy Successfully Added',
           ToastAndroid.SHORT,
@@ -54,14 +46,9 @@ const AddDeliveryBoy = ({navigation}) => {
             routes: [{name: 'NurseryDashboard'}],
           }),
         );
-      } else {
-        ToastAndroid.show(
-          'Error Occured while adding Delivery Boy',
-          ToastAndroid.SHORT,
-        );
       }
     } catch (error) {
-      console.error('Error:', error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };
 
@@ -127,7 +114,7 @@ const AddDeliveryBoy = ({navigation}) => {
 
         <TouchableOpacity
           style={[styles.button, {backgroundColor: appTheme.colors.primary}]}
-          onPress={addDeliveryBoy}>
+          onPress={handleAddDeliveryBoy}>
           <Text
             style={[
               styles.buttonText,

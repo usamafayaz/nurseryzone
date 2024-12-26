@@ -19,8 +19,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import auth from '../../services/auth';
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('sarmad@gmail.com');
-  const [password, setPassword] = useState('userpassword');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [apiModalVisible, setApiModalVisible] = useState(false);
   const [apiAddress, setApiAddress] = useState('');

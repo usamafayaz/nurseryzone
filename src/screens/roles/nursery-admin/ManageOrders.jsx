@@ -12,8 +12,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
 import {Picker} from '@react-native-picker/picker';
 import {appTheme} from '../../../config/constants';
-import {API_BASE_URL} from '../../../utils/apiConfig';
 import {useNavigation} from '@react-navigation/native';
+import nurserySideApi from '../../../services/nurserySideApi';
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -25,14 +25,19 @@ const ManageOrders = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const {
+    fetchDeliveryBoys,
+    fetchCustomersOrders,
+    updateOrderStatus,
+    assignDelivery,
+  } = nurserySideApi;
   const fetchData = async () => {
     try {
       const userData = await AsyncStorage.getItem('userData');
       const nursery = JSON.parse(userData);
       await Promise.all([
         fetchOrders(nursery.user_id),
-        fetchDeliveryBoys(nursery.user_id),
+        fetchBoys(nursery.user_id),
       ]);
     } catch (err) {
       setError(err.message);
@@ -42,35 +47,23 @@ const ManageOrders = () => {
   };
 
   const fetchOrders = async nurseryId => {
-    const response = await fetch(
-      `${API_BASE_URL}/order?nursery_id=${nurseryId}&skip=0&limit=20`,
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setOrders(data.reverse());
-    }
+    const response = await fetchCustomersOrders(nurseryId);
+    setOrders(response);
   };
 
-  const fetchDeliveryBoys = async nurseryId => {
-    const response = await fetch(
-      `${API_BASE_URL}/delivery/boy?nursery_id=${nurseryId}`,
-    );
-    const result = await response.json();
-    if (response.ok) {
-      setDeliveryBoys([
-        {delivery_boy_id: 90, name: 'Select Delivery Boy', user_id: 90},
-        ...result,
-      ]);
-    }
+  const fetchBoys = async nurseryId => {
+    const response = await fetchDeliveryBoys(nurseryId);
+
+    setDeliveryBoys([
+      {delivery_boy_id: 90, name: 'Select Delivery Boy', user_id: 90},
+      ...response,
+    ]);
   };
 
-  const updateOrderStatus = async (orderId, newStatus) => {
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/order/status?order_id=${orderId}&status=${newStatus}`,
-        {method: 'PUT'},
-      );
-      if (response.ok) {
+      const response = await updateOrderStatus(orderId, newStatus);
+      if (response == true) {
         ToastAndroid.show(
           'Order status updated successfully!',
           ToastAndroid.SHORT,
@@ -88,19 +81,13 @@ const ManageOrders = () => {
 
   const scheduleDelivery = async (orderId, deliveryBoyID) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/delivery/schedule?delivery_boy_id=${deliveryBoyID}&order_id=${orderId}`,
-        {method: 'POST'},
-      );
-      response.ok &&
+      const response = assignDelivery(orderId, deliveryBoyID);
+      if (response == true)
         ToastAndroid.show(
           'Order Assigned to Delivery Boy!',
           ToastAndroid.SHORT,
         );
-
-      if (!response.ok) {
-        throw new Error('Failed to schedule delivery');
-      }
+      else throw new Error('Failed to schedule delivery');
     } catch (err) {
       console.error(err);
     }
@@ -179,7 +166,9 @@ const ManageOrders = () => {
           <Picker
             selectedValue={order.Status}
             style={styles.picker}
-            onValueChange={value => updateOrderStatus(order.order_id, value)}>
+            onValueChange={value =>
+              handleUpdateOrderStatus(order.order_id, value)
+            }>
             {statusOptions.map(status => (
               <Picker.Item key={status} label={status} value={status} />
             ))}
