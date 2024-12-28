@@ -48,16 +48,19 @@ const ManageOrders = () => {
 
   const fetchOrders = async nurseryId => {
     const response = await fetchCustomersOrders(nurseryId);
-    setOrders(response);
+    if (response.length > 0) {
+      setOrders(response);
+    }
   };
 
   const fetchBoys = async nurseryId => {
     const response = await fetchDeliveryBoys(nurseryId);
-
-    setDeliveryBoys([
-      {delivery_boy_id: 90, name: 'Select Delivery Boy', user_id: 90},
-      ...response,
-    ]);
+    if (response.length > 0) {
+      setDeliveryBoys([
+        {delivery_boy_id: 90, name: 'Select Delivery Boy', user_id: 90},
+        ...response,
+      ]);
+    }
   };
 
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
@@ -81,13 +84,13 @@ const ManageOrders = () => {
 
   const scheduleDelivery = async (orderId, deliveryBoyID) => {
     try {
-      const response = assignDelivery(orderId, deliveryBoyID);
+      const response = await assignDelivery(orderId, deliveryBoyID);
       if (response == true)
         ToastAndroid.show(
           'Order Assigned to Delivery Boy!',
           ToastAndroid.SHORT,
         );
-      else throw new Error('Failed to schedule delivery');
+      else throw new Error('Failed to schedule deliveddddry');
     } catch (err) {
       console.error(err);
     }

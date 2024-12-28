@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {appTheme} from '../../../config/constants';
 import {useSelector} from 'react-redux';
@@ -34,6 +35,17 @@ const CustomerHeader = ({title = 'Plant Store', onLogout}) => {
           )}
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() => {
+            navigation.navigate('Chat Bot');
+          }}>
+          <MaterialCommunityIcons
+            name="robot"
+            size={24}
+            color={appTheme.colors.primaryBackground}
+          />
+        </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton} onPress={onLogout}>
           <Icon
             name="logout"
@@ -76,12 +88,12 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   iconButton: {
-    padding: 8,
+    padding: 4,
     position: 'relative',
   },
   badge: {
     position: 'absolute',
-    top: 2,
+    top: -2,
     right: 0,
     backgroundColor: appTheme.colors.error,
     borderRadius: 12,

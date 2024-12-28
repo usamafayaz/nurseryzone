@@ -126,9 +126,13 @@ const fetchDeliveryBoys = async nurseryId => {
     const response = await fetch(
       `${API_BASE_URL}/delivery/boy?nursery_id=${nurseryId}`,
     );
+
     if (response.ok) {
       const result = await response.json();
       return result;
+    }
+    if (response.status == 404) {
+      return [];
     }
   } catch (error) {
     throw error;
@@ -155,7 +159,7 @@ const updateOrderStatus = async (orderId, newStatus) => {
     );
     if (response.ok) return true;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 const assignDelivery = async (orderId, deliveryBoyID) => {
@@ -164,10 +168,12 @@ const assignDelivery = async (orderId, deliveryBoyID) => {
       `${API_BASE_URL}/delivery/schedule?delivery_boy_id=${deliveryBoyID}&order_id=${orderId}`,
       {method: 'POST'},
     );
+
     if (response.ok) return true;
     else return false;
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 
