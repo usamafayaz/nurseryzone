@@ -11,7 +11,7 @@ import {appTheme} from '../../../config/constants';
 // Initialize the API
 const genAI = new GoogleGenerativeAI(apiKey.API_KEY);
 
-const ChatBot = () => {
+const ChatBot = ({navigation}) => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,6 +66,21 @@ const ChatBot = () => {
   return (
     <View
       style={[styles.container, {backgroundColor: colors.primaryBackground}]}>
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Icon
+            name="arrow-left"
+            size={24}
+            color={colors.primaryBackground}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.headerTitle}>Plant Assistant</Text>
+          </View>
+        </View>
+      </View>
       {messages.length === 0 && (
         <View
           style={[
@@ -77,9 +92,8 @@ const ChatBot = () => {
             Welcome to Gemini Chat
           </Text>
           <Text style={[styles.welcomeText, {color: colors.secondaryText}]}>
-            Curious about plants? 🌿 Ask me anything about plant care, types of
-            plants, or gardening tips, and I'll provide you with helpful
-            insights!
+            Curious about plants? 🌿 Ask me anything about plant care and I'll
+            provide you with helpful insights!
           </Text>
         </View>
       )}
@@ -97,12 +111,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    backgroundColor: appTheme.colors.primary,
+    padding: 16,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  headerTextContainer: {
+    flex: 1,
+  },
+  headerTitle: {
+    color: appTheme.colors.primaryBackground,
+    fontSize: appTheme.fontSizes.large,
+    fontFamily: appTheme.fontFamilies.bold,
+  },
   welcomeContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
     borderRadius: 10,
-    margin: 10,
+    margin: 20,
+    marginTop: 50,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,

@@ -233,9 +233,6 @@ const ManageOrders = () => {
         />
         <View>
           <Text style={styles.headerTitle}>Manage Customer Orders</Text>
-          <Text style={styles.headerSubtitle}>
-            View and manage customer orders
-          </Text>
         </View>
       </View>
 
@@ -278,10 +275,6 @@ const styles = StyleSheet.create({
     color: appTheme.colors.primaryBackground,
     fontSize: appTheme.fontSizes.large,
     fontFamily: appTheme.fontFamilies.bold,
-  },
-  headerSubtitle: {
-    color: appTheme.colors.primaryBackground + '90',
-    fontSize: appTheme.fontSizes.small,
   },
   listContainer: {
     padding: 16,

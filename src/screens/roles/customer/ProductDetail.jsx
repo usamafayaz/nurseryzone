@@ -189,11 +189,10 @@ const styles = StyleSheet.create({
     backgroundColor: appTheme.colors.primary,
   },
   headerText: {
-    fontSize: appTheme.fontSizes.xlarge,
-    fontFamily: appTheme.fontFamilies.bold,
-    fontWeight: 'bold',
-    marginLeft: 16,
     color: appTheme.colors.primaryBackground,
+    fontSize: appTheme.fontSizes.large,
+    fontFamily: appTheme.fontFamilies.bold,
+    marginLeft: 16,
   },
   centerContainer: {
     flex: 1,

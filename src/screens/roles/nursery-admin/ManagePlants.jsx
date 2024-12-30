@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  TextInput,
   Modal,
   StyleSheet,
   ToastAndroid,
@@ -16,6 +15,7 @@ import {appTheme} from '../../../config/constants';
 import * as ImagePicker from 'react-native-image-picker';
 import customerSideApi from '../../../services/customerSideApi';
 import nurserySideApi from '../../../services/nurserySideApi';
+import InputField from '../../../components/InputField';
 
 const ManagePlants = ({navigation}) => {
   const [plants, setPlants] = useState([]);
@@ -197,56 +197,85 @@ const ManagePlants = ({navigation}) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Edit Plant Details</Text>
-            <Text style={styles.description}>Plant Name</Text>
-            <TextInput
-              style={styles.input}
+            <InputField
+              label="Plant Name"
+              iconName="eco"
               value={modalPlant?.name}
               onChangeText={text => setModalPlant({...modalPlant, name: text})}
               placeholder="Plant Name"
               placeholderTextColor={appTheme.colors.secondaryText}
             />
-            <Text style={styles.description}>Plant Description</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
+            <InputField
+              label="Plant Description"
+              iconName="description"
               value={modalPlant?.description}
               onChangeText={text =>
                 setModalPlant({...modalPlant, description: text})
               }
-              placeholder="Description"
+              placeholder="Plant Description"
               placeholderTextColor={appTheme.colors.secondaryText}
+              customStyle={styles.textArea}
               multiline
             />
 
             <View style={styles.inputRow}>
-              <Text style={styles.description}>Price</Text>
-              <TextInput
-                style={[styles.input, styles.halfInput]}
-                value={modalPlant?.price?.toString()}
-                onChangeText={text =>
-                  setModalPlant({...modalPlant, price: text})
-                }
-                placeholder="Price"
-                placeholderTextColor={appTheme.colors.secondaryText}
-                keyboardType="numeric"
-              />
-              <Text style={styles.description}>Stock</Text>
-
-              <TextInput
-                style={[styles.input, styles.halfInput]}
-                value={modalPlant?.stock?.toString()}
-                onChangeText={text =>
-                  setModalPlant({...modalPlant, stock: text})
-                }
-                placeholder="Stock"
-                placeholderTextColor={appTheme.colors.secondaryText}
-                keyboardType="numeric"
-              />
+              <View style={{flex: 1}}>
+                <InputField
+                  label="Price"
+                  iconName="attach-money"
+                  value={modalPlant?.price?.toString()}
+                  onChangeText={text =>
+                    setModalPlant({...modalPlant, price: text})
+                  }
+                  placeholder="Price"
+                  placeholderTextColor={appTheme.colors.secondaryText}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={{flex: 1}}>
+                <InputField
+                  label="Stock"
+                  iconName="inventory"
+                  value={modalPlant?.stock?.toString()}
+                  onChangeText={text =>
+                    setModalPlant({...modalPlant, stock: text})
+                  }
+                  placeholder="Stock"
+                  placeholderTextColor={appTheme.colors.secondaryText}
+                  keyboardType="numeric"
+                />
+              </View>
             </View>
-            <TouchableOpacity style={styles.input} onPress={handleImagePick}>
-              <Text style={styles.description}>
-                {imageSelected ? 'Image Selected' : 'Choose Image'}
+            <View style={styles.inputContainer}>
+              <Text
+                style={[styles.label, {color: appTheme.colors.secondaryText}]}>
+                Plant Image
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleImagePick}
+                style={[
+                  styles.inputWrapper,
+                  {backgroundColor: appTheme.colors.inputBackground},
+                ]}>
+                <Icon
+                  name="add-photo-alternate"
+                  size={20}
+                  color={appTheme.colors.secondaryText}
+                  style={styles.inputIcon}
+                />
+                <Text
+                  style={[
+                    styles.imagePickerText,
+                    {
+                      color: imageSelected
+                        ? appTheme.colors.primaryText
+                        : appTheme.colors.placeholderText,
+                    },
+                  ]}>
+                  {imageSelected ? 'Image Selected' : 'Choose an image'}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.modalActions}>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -402,26 +431,15 @@ const styles = StyleSheet.create({
     fontFamily: appTheme.fontFamilies.bold,
     marginBottom: 16,
   },
-  input: {
-    color: appTheme.colors.primaryText,
-    backgroundColor: appTheme.colors.inputBackground,
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
-    fontSize: appTheme.fontSizes.medium,
-    justifyContent: 'center',
-  },
   textArea: {
-    height: 100,
+    height: 90,
     textAlignVertical: 'top',
   },
   inputRow: {
     flexDirection: 'row',
+    gap: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  halfInput: {
-    flex: 0.48,
   },
   modalActions: {
     flexDirection: 'row',
@@ -448,6 +466,29 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: 'white',
     fontSize: appTheme.fontSizes.medium,
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: appTheme.fontSizes.small,
+    fontFamily: appTheme.fontFamilies.regular,
+    marginBottom: 8,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    height: 50,
+  },
+  inputIcon: {
+    marginRight: 10,
+  },
+  imagePickerText: {
+    flex: 1,
+    fontSize: appTheme.fontSizes.medium,
+    fontFamily: appTheme.fontFamilies.regular,
   },
 });
 

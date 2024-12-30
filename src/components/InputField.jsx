@@ -18,6 +18,8 @@ const InputField = ({
   secureTextEntry,
   keyboardType = 'default',
   error,
+  customStyle = {},
+  multiline = false,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -52,7 +54,12 @@ const InputField = ({
           placeholderTextColor={appTheme.colors.placeholderText}
           secureTextEntry={secureTextEntry && !showPassword}
           keyboardType={keyboardType}
-          style={[styles.input, {color: appTheme.colors.primaryText}]}
+          style={[
+            styles.input,
+            {color: appTheme.colors.primaryText},
+            customStyle,
+          ]}
+          multiline={multiline}
         />
         {secureTextEntry && (
           <TouchableOpacity onPress={togglePassword}>

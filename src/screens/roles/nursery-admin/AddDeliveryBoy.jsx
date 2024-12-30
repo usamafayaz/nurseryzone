@@ -12,6 +12,7 @@ import {appTheme} from '../../../config/constants';
 import InputField from '../../../components/InputField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import nurserySideApi from '../../../services/nurserySideApi';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AddDeliveryBoy = ({navigation}) => {
   const [deliveryBoyInfo, setDeliveryBoyInfo] = useState({
@@ -59,10 +60,20 @@ const AddDeliveryBoy = ({navigation}) => {
         {backgroundColor: appTheme.colors.primaryBackground},
       ]}
       bounces={false}>
-      <View style={styles.logoContainer}>
-        <Text style={[styles.title, {color: appTheme.colors.primary}]}>
-          Register Delivery Associate
-        </Text>
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Icon
+            name="arrow-left"
+            size={24}
+            color={appTheme.colors.primaryBackground}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.headerTitle}>Register Delivery Associate</Text>
+          </View>
+        </View>
       </View>
 
       <View
@@ -142,18 +153,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: appTheme.colors.primaryBackground,
-    padding: 15,
   },
-  logoContainer: {
+  header: {
+    backgroundColor: appTheme.colors.primary,
+    padding: 16,
+  },
+  headerContent: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: appTheme.screen.height * 0.05,
-    marginBottom: 20,
+    gap: 12,
   },
-  title: {
-    fontSize: appTheme.fontSizes.xlarge,
+  headerTextContainer: {
+    flex: 1,
+  },
+  headerTitle: {
+    color: appTheme.colors.primaryBackground,
+    fontSize: appTheme.fontSizes.large,
     fontFamily: appTheme.fontFamilies.bold,
-    fontWeight: 'bold',
-    marginBottom: 8,
   },
   subtitle: {
     fontSize: appTheme.fontSizes.medium,
@@ -162,6 +178,8 @@ const styles = StyleSheet.create({
   formContainer: {
     borderRadius: 16,
     padding: 20,
+    margin: 15,
+    marginTop: 40,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

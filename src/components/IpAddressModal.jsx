@@ -96,7 +96,7 @@ const IPAddressModal = ({
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>New IP Address:Port</Text>
               <InputField
-                placeholder="Enter IP Address (e.g., 192.168.1.1:8080)"
+                placeholder="Enter IP (192.168.1.1:8080)"
                 value={apiAddress}
                 onChangeText={onChangeApiAddress}
                 iconName="router"

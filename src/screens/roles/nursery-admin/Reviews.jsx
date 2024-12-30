@@ -82,9 +82,6 @@ const Reviews = () => {
           />
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle}>Customer Reviews</Text>
-            <Text style={styles.headerSubtitle}>
-              View and manage customer feedback
-            </Text>
           </View>
         </View>
       </View>
@@ -133,11 +130,6 @@ const styles = StyleSheet.create({
     color: appTheme.colors.primaryBackground,
     fontSize: appTheme.fontSizes.large,
     fontFamily: appTheme.fontFamilies.bold,
-  },
-  headerSubtitle: {
-    color: appTheme.colors.secondaryBackground,
-    fontSize: appTheme.fontSizes.small,
-    marginTop: 4,
   },
   scrollContent: {
     padding: 16,

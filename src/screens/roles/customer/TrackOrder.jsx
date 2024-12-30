@@ -162,15 +162,16 @@ const TrackOrders = () => {
       ) : (
         <>
           <View style={styles.header}>
-            <Icon
-              name="arrow-left"
-              size={28}
-              color={colors.primary}
-              onPress={() => {
-                navigation.goBack();
-              }}
-            />
-            <Text style={styles.headerText}>Track Orders</Text>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <Icon
+                name="chevron-left"
+                size={24}
+                color={appTheme.colors.primary}
+              />
+              <Text style={styles.backButtonText}>Track Orders</Text>
+            </TouchableOpacity>
           </View>
 
           <FlatList
@@ -246,9 +247,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondaryBackground,
   },
   header: {
+    padding: 16,
+  },
+  backButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+  },
+  backButtonText: {
+    marginLeft: 8,
+    color: appTheme.colors.primary,
+    fontSize: appTheme.fontSizes.medium,
+    fontFamily: appTheme.fontFamilies.medium,
   },
   headerText: {
     fontSize: fontSizes.xlarge,
