@@ -1,39 +1,126 @@
-# AI ChatBot
+# 🌱 Nursery Zone
 
-AI ChatBot is a mobile application developed in React Native that allows users to have conversations with Google's Generative AI (Gemini API).
+**Nursery Zone** is a React Native mobile application designed to streamline plant nursery operations. It provides an efficient platform for nurseries to manage their products, customers to place orders, and delivery personnel to track and deliver orders. The app features a role-based access system with a user-friendly interface, ensuring a seamless experience for all users.
 
-## Overview
+---
 
-AI ChatBot enables users to send messages and receive conversational responses from the Gemini API. The app simulates a real-time chat experience using Google's AI models.
+## 🚀 Features
 
-## Features
+### Role-Based Access:
 
-### Conversational AI
+- **Super Admin**:
 
-- **Send Messages**: Users can input messages and send them to the Gemini API.
-- **Receive Responses**: The AI generates conversational responses based on user input.
+  - Approves or rejects nursery registration requests.
+  - Manages analytics and overall platform monitoring.
 
-### Real-time Chat
+- **Nursery Admin**:
 
-- **Message Display**: The chat interface displays user messages and AI responses seamlessly.
+  - Manages plant inventory (add, update, delete plants).
+  - Tracks and updates the status of customer orders.
+  - Register their own delivery boys.
+  - Assigns delivery personnel for orders.
 
-## Technology Stack
+- **Customer**:
 
-- **Framework**: React Native
-- **API**: Google Gemini API
+  - Browses plants of all nurseries and filter among them.
+  - Places orders for plants.
+  - Tracks order status.
+  - Provides reviews for purchased products.
 
-## Installation and Setup
+- **Delivery Personnel**:
+  - Views assigned orders.
+  - Updates the order status to "Delivered" upon successful delivery.
+
+### Additional Features:
+
+- **Nursery Registration Workflow**:
+  - Nurseries can sign up, and their requests are reviewed and approved/rejected by the Super Admin.
+- **Customer Order Management**:
+  - End-to-end tracking of orders, from placement to delivery.
+- **Customer Reviews**:
+  - Customers leave reviews after receiving the order.
+  - Reviews are visible to other customers and Nursery Admins.
+- **Chatbot Integration**:
+  - Customers can get instant information about plants via an integrated chatbot.
+  - The chatbot uses the **Gemini API** in the backend for seamless and intelligent conversations.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend:
+
+- **React Native**
+  - Framework for building the mobile app.
+  - User-friendly design with seamless experience.
+
+### Backend:
+
+- **FastAPI**
+  - Lightweight and fast backend framework.
+  - Handles user authentication, order management, and analytics.
+- **Gemini API**
+  - Powers the chatbot for intelligent plant-related conversations.
+
+---
+
+## 📱 Application Workflow
+
+1. **Nursery Registration**:
+
+   - Nursery Admins sign up via the app.
+   - Super Admin reviews and approves/rejects the signup request.
+
+2. **Plant Management**:
+
+   - Approved Nursery Admins log in to add and manage their plants.
+
+3. **Customer Orders**:
+
+   - Customers browse plants, add them to their cart, and place orders.
+   - Nursery Admins update the order status (e.g., processing, shipped).
+
+4. **Delivery Management**:
+
+   - Nursery Admin assigns orders to delivery personnel.
+   - Delivery personnel update the order status to "Delivered" or "Cancelled"
+
+5. **Chatbot Assistance**:
+
+   - Customers can ask the chatbot questions about plants (e.g., care tips, delivery details).
+   - The chatbot leverages the Gemini API to provide real-time answers.
+
+6. **Customer Reviews**:
+   - Customers leave reviews after receiving the order.
+   - Reviews are visible to other customers and the Nursery Admin.
+
+## Screenshots
+
+![Alt text](src/assets/screenshots/1.png)
+![Alt text](src/assets/screenshots/2.png)
+![Alt text](src/assets/screenshots/3.png)
+![Alt text](src/assets/screenshots/4.png)
+
+## 🔧 Installation
+
+### Prerequisites:
+
+- Node.js installed on your machine.
+- Python environment for FastAPI backend.
+
+### Frontend Setup:
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/usamafayaz/ai-chatbot.git
+   git clone https://github.com/usamafayaz/nurseryzone.git
+
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd ai-chatbot
+   cd nurseryzone
    ```
 
 3. Install React Native packages and dependencies:

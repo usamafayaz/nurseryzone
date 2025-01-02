@@ -29,7 +29,7 @@ const fetchNurseryRequests = async (
     if (response.ok) {
       return await response.json();
     } else if (response.status === 404) {
-      return []; // Return an empty array for no requests
+      return [];
     } else {
       throw new Error('Failed to fetch nursery requests');
     }
@@ -50,7 +50,7 @@ const processNurseryRequest = async (nurseryId, isAccepted) => {
     const result = await response.json();
 
     if (response.ok) {
-      return result; // Return success response
+      return result;
     } else {
       throw new Error(result.message || 'Failed to process nursery request');
     }

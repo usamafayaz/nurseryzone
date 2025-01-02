@@ -115,7 +115,6 @@ const CustomerDashboard = () => {
 };
 
 const styles = StyleSheet.create({
-  // Dashboard styles
   container: {
     flex: 1,
     backgroundColor: appTheme.colors.secondaryBackground,

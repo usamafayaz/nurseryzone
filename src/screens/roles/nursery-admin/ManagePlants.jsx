@@ -188,7 +188,6 @@ const ManagePlants = ({navigation}) => {
         <FlatList
           data={plants}
           renderItem={renderPlantCard}
-          // keyExtractor={item => item.plant_id.toString()}
           contentContainerStyle={styles.listContainer}
         />
       )}
