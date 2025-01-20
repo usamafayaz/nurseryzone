@@ -152,7 +152,17 @@ const ManageOrders = () => {
 
       <View style={styles.customerSection}>
         <Icon name="user" size={16} color={appTheme.colors.secondaryText} />
-        <Text style={styles.sectionTitle}>Customer</Text>
+        <Text style={styles.sectionTitle}>{order.user_name}</Text>
+      </View>
+
+      <View style={styles.customerSection}>
+        <Icon name="home" size={16} color={appTheme.colors.secondaryText} />
+        <Text style={styles.sectionTitle}>{order.user_address}</Text>
+      </View>
+
+      <View style={styles.customerSection}>
+        <Icon name="phone" size={16} color={appTheme.colors.secondaryText} />
+        <Text style={styles.sectionTitle}>{order.user_contact_no}</Text>
       </View>
 
       <View style={styles.productSection}>

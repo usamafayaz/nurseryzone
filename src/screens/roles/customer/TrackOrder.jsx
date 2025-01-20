@@ -108,11 +108,6 @@ const TrackOrders = () => {
         </View>
       </View>
 
-      <View style={styles.customerInfo}>
-        <Icon name="account" size={16} color={colors.placeholderText} />
-        <Text style={styles.customerText}>Customer</Text>
-      </View>
-
       <View style={styles.productInfo}>
         <View>
           <Text style={styles.productName}>{order['Plant name']}</Text>
@@ -344,20 +339,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: fontSizes.small,
     fontFamily: fontFamilies.bold,
-  },
-  customerInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.secondaryBackground,
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
-  customerText: {
-    marginLeft: 8,
-    fontSize: fontSizes.small,
-    fontFamily: fontFamilies.bold,
-    color: colors.primaryText,
   },
   productInfo: {
     backgroundColor: colors.secondaryBackground,
