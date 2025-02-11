@@ -46,6 +46,7 @@ const TrackOrders = () => {
       if (!userData) throw new Error('User data not found');
       const {user_id} = JSON.parse(userData);
       const data = await fetchMyOrders(user_id);
+
       setOrders(data.reverse());
     } catch (err) {
       ToastAndroid.show(err.message, ToastAndroid.SHORT);

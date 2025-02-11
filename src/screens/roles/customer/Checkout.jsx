@@ -7,31 +7,47 @@ import {
   Image,
   StyleSheet,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
+import {useStripe} from '@stripe/stripe-react-native';
 import {appTheme} from '../../../config/constants';
 import {removeItem} from '../../../redux/cartSlice';
 import customerSideApi from '../../../services/customerSideApi';
+import paymentApi from '../../../services/paymentApi';
 
 const CheckoutScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState('COD');
+  const [loading, setLoading] = useState(false);
+  const [paymentSheetReady, setPaymentSheetReady] = useState(false);
   const cartItems = useSelector(state => state.cart.items);
-  const {getImageUrl, placeCustomerOrder} = customerSideApi;
+  const [paymentMethod, setPaymentMethod] = useState('COD');
+
+  const dispatch = useDispatch();
+
+  // Initialize Stripe hooks
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
+
+  useEffect(() => {
+    if (paymentMethod === 'CARD' && cartItems.length > 0) {
+      initializePaymentSheet();
+    }
+  }, [paymentMethod]);
 
   useEffect(() => {
     loadUserData();
+    if (cartItems.length > 0) {
+      initializePaymentSheet();
+    }
   }, []);
-  const dispatch = useDispatch();
+
   const loadUserData = async () => {
     try {
       const data = await AsyncStorage.getItem('userData');
       setUserData(JSON.parse(data));
-    } catch (error) {
-      console.error('Error loading user data:', error);
-    }
+    } catch (error) {}
   };
 
   const getTotalPrice = () => {
@@ -41,22 +57,131 @@ const CheckoutScreen = ({navigation}) => {
     );
   };
 
-  const handleSubmitOrder = async () => {
+  const fetchPaymentSheetParams = async () => {
     try {
-      const data = JSON.stringify({
+      return await paymentApi.createPaymentIntent(getTotalPrice());
+    } catch (error) {
+      throw new Error('Failed to fetch payment details: ' + error.message);
+    }
+  };
+
+  // Initialize the Payment Sheet
+  const initializePaymentSheet = async () => {
+    setLoading(true);
+    try {
+      const {clientSecret, publishableKey} = await fetchPaymentSheetParams();
+
+      const {error} = await initPaymentSheet({
+        paymentIntentClientSecret: clientSecret,
+        merchantDisplayName: 'Nurser Zone',
+        customFlow: true, // Enable custom flow to show only card fields
+        style: 'automatic',
+        appearance: {
+          colors: {
+            primary: appTheme.colors.primary,
+          },
+        },
+        defaultValues: {
+          billingDetails: {
+            name: userData?.name, // Only include name if you want it pre-filled
+          },
+        },
+        // Specify which fields to collect
+        paymentMethodTypes: ['card'],
+        billingDetailsCollectionConfiguration: {
+          name: 'never',
+          phone: 'never',
+          email: 'never',
+          address: 'never',
+        },
+      });
+
+      if (error) {
+        ToastAndroid.show(`Error ${error.message}`, ToastAndroid.SHORT);
+      } else {
+        setPaymentSheetReady(true);
+      }
+    } catch (error) {
+      ToastAndroid.show(`Error ${error.message}`, ToastAndroid.SHORT);
+      // If there's an error, switch back to COD
+      setPaymentMethod('COD');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmitOrder = async () => {
+    setLoading(true);
+    try {
+      // If payment method is card, handle Stripe payment first
+      if (paymentMethod === 'CARD') {
+        const {error} = await presentPaymentSheet();
+        if (error) {
+          ToastAndroid.show(`Error ${error.message}`, ToastAndroid.SHORT);
+          return;
+        }
+      }
+
+      // Proceed with order submission
+      const orderData = JSON.stringify({
         user_id: userData.user_id,
         plant_id: cartItems[0].plant_id,
         quantity: cartItems[0].quantity,
       });
-      const response = await placeCustomerOrder(data);
-      if (response == true) {
+
+      const response = await customerSideApi.placeCustomerOrder(orderData);
+      if (response === true) {
         dispatch(removeItem(cartItems[0].plant_id));
         navigation.replace('OrderSuccess');
       }
     } catch (error) {
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      ToastAndroid.show(
+        error.message || 'An error occurred',
+        ToastAndroid.SHORT,
+      );
+    } finally {
+      setLoading(false);
     }
   };
+
+  const PaymentMethodSelection = () => (
+    <View style={styles.section}>
+      <View style={styles.sectionHeader}>
+        <Icon name="payment" size={24} color={appTheme.colors.primary} />
+        <Text style={styles.sectionTitle}>Payment Method</Text>
+      </View>
+
+      <TouchableOpacity
+        style={styles.paymentOption}
+        onPress={() => setPaymentMethod('COD')}>
+        <Icon
+          name={
+            paymentMethod === 'COD'
+              ? 'radio-button-checked'
+              : 'radio-button-unchecked'
+          }
+          size={24}
+          color={appTheme.colors.primary}
+        />
+        <Text style={styles.paymentOptionText}>Cash on Delivery (COD)</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.paymentOption}
+        onPress={() => setPaymentMethod('CARD')}>
+        <Icon
+          name={
+            paymentMethod === 'CARD'
+              ? 'radio-button-checked'
+              : 'radio-button-unchecked'
+          }
+          size={24}
+          color={appTheme.colors.primary}
+        />
+        <Text style={styles.paymentOptionText}>Pay with Card</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   if (cartItems.length === 0) {
     return (
@@ -85,6 +210,7 @@ const CheckoutScreen = ({navigation}) => {
         <Text style={styles.textStyle}>Back to Cart</Text>
       </TouchableOpacity>
 
+      {/* Personal Information Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="person" size={24} color={appTheme.colors.primary} />
@@ -108,30 +234,9 @@ const CheckoutScreen = ({navigation}) => {
         )}
       </View>
 
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Icon name="payment" size={24} color={appTheme.colors.primary} />
-          <Text style={styles.sectionTitle}>Payment Method</Text>
-        </View>
+      <PaymentMethodSelection />
 
-        <TouchableOpacity
-          style={styles.paymentOption}
-          onPress={() => setPaymentMethod('COD')}>
-          <Icon
-            name={
-              paymentMethod === 'COD'
-                ? 'radio-button-checked'
-                : 'radio-button-unchecked'
-            }
-            size={24}
-            color={appTheme.colors.primary}
-          />
-          <Text style={[styles.value, {marginBottom: 0, marginLeft: 10}]}>
-            Cash on Delivery (COD)
-          </Text>
-        </TouchableOpacity>
-      </View>
-
+      {/* Order Summary Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon
@@ -145,7 +250,7 @@ const CheckoutScreen = ({navigation}) => {
         {cartItems.map(item => (
           <View key={item.plant_id} style={styles.orderItem}>
             <Image
-              source={{uri: getImageUrl(item.image_url)}}
+              source={{uri: customerSideApi.getImageUrl(item.image_url)}}
               style={styles.itemImage}
             />
             <View style={styles.itemDetails}>
@@ -164,11 +269,26 @@ const CheckoutScreen = ({navigation}) => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmitOrder}>
-        <Text style={styles.submitButtonText}>Complete Order</Text>
-        <Icon name="chevron-right" size={24} color="white" />
+      <TouchableOpacity
+        style={[
+          styles.submitButton,
+          (loading || (paymentMethod === 'CARD' && !paymentSheetReady)) &&
+            styles.disabledButton,
+        ]}
+        onPress={handleSubmitOrder}
+        disabled={loading || (paymentMethod === 'CARD' && !paymentSheetReady)}>
+        {loading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <>
+            <Text style={styles.submitButtonText}>
+              {paymentMethod === 'COD' ? 'Place Order' : 'Pay Now'}
+            </Text>
+            <Icon name="chevron-right" size={24} color="white" />
+          </>
+        )}
       </TouchableOpacity>
-      <View style={{backgroundColor: 'white', height: 30}}></View>
+      <View style={{backgroundColor: 'white', height: 30}} />
     </ScrollView>
   );
 };
@@ -226,11 +346,6 @@ const styles = StyleSheet.create({
     fontSize: appTheme.fontSizes.medium,
     marginBottom: 8,
   },
-  paymentOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 8,
-  },
   orderItem: {
     flexDirection: 'row',
     padding: 12,
@@ -270,6 +385,21 @@ const styles = StyleSheet.create({
     fontSize: appTheme.fontSizes.medium,
     fontFamily: appTheme.fontFamilies.bold,
     marginRight: 8,
+  },
+  disabledButton: {
+    backgroundColor: '#cccccc',
+  },
+  paymentOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginVertical: 4,
+  },
+  paymentOptionText: {
+    marginLeft: 12,
+    fontSize: appTheme.fontSizes.medium,
+    color: appTheme.colors.primaryText,
+    fontFamily: appTheme.fontFamilies.medium,
   },
 });
 
