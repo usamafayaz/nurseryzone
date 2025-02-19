@@ -1,6 +1,6 @@
 # 🌱 Nursery Zone
 
-**Nursery Zone** is a React Native mobile application designed to streamline plant nursery operations. It provides an efficient platform for nurseries to manage their products, customers to place orders, and delivery personnel to track and deliver orders. The app features a role-based access system with a user-friendly interface, ensuring a seamless experience for all users.
+**Nursery Zone** is a React Native mobile application designed to streamline plant nursery operations. It provides an efficient platform for nurseries to manage their products, customers to place orders, and delivery personnel to track and deliver orders. The app features a role-based access system with a user-friendly interface, ensuring a smooth experience for all users. It also includes integrated Stripe payments for seamless transactions.
 
 ---
 
@@ -26,6 +26,7 @@
   - Places orders for plants.
   - Tracks order status.
   - Provides reviews for purchased products.
+  - Pays securely through Stripe payment integration.
 
 - **Delivery Personnel**:
   - Views assigned orders.
@@ -43,6 +44,8 @@
 - **Chatbot Integration**:
   - Customers can get instant information about plants via an integrated chatbot.
   - The chatbot uses the **Gemini API** in the backend for seamless and intelligent conversations.
+- **Secure Payments via Stripe**:
+- Customers can complete transactions securely using Stripe Checkout.
 
 ---
 
@@ -61,6 +64,8 @@
   - Handles user authentication, order management, and analytics.
 - **Gemini API**
   - Powers the chatbot for intelligent plant-related conversations.
+- **Stripe API**
+  - Secure and seamless payment processing.
 
 ---
 
@@ -91,8 +96,14 @@
    - The chatbot leverages the Gemini API to provide real-time answers.
 
 6. **Customer Reviews**:
+
    - Customers leave reviews after receiving the order.
    - Reviews are visible to other customers and the Nursery Admin.
+
+7. **Payment Processing**:
+   - Customers pay securely through Stripe Checkout.
+   - Payment confirmation is displayed in the app.
+   - Stripe ensures secure transactions with fraud detection.
 
 ## Screenshots
 
